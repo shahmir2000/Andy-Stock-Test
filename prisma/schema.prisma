@@ -41,227 +41,227 @@ model Ticker {
 
 model TTM {
   id                              Int      @id @default(autoincrement())
-  premarketPrice                  String?
-  priceChnage                     String?
-  StrongBuy                       String?
-  TargetPrice                     String?
-  Buy                             String?
-  Hold                            String?
-  Sell                            String?
-  StrongSell                      String?
-  MostRecentQuarter               String?
+  premarketPrice                  Float?
+  priceChnage                     Float?
+  StrongBuy                       Float?
+  TargetPrice                     Float?
+  Buy                             Float?
+  Hold                            Float?
+  Sell                            Float?
+  StrongSell                      Float?
+  MostRecentQuarter               String? //done
   earningsDate                    String?
-  sharesOutTTM                    String?
+  sharesOutTTM                    Float?
   preMarketDate                   String?
   industry                        String?
-  pbRatio                         String?
-  founded                         String?
-  TotalShareholderReturn          String?
-  incomeTaxExpense                String?
-  fcfGrowthThreeYears             String?
-  fcfGrowthFiveYears              String?
-  forwardPe                       String?
-  returnOnEquity5Year             String?
-  returnOnAssets5Year             String?
-  returnOnCapital5Year            String?
+  pbRatio                         Float?
+  founded                         Float?
+  TotalShareholderReturn          Float?
+  incomeTaxExpense                Float?
+  fcfGrowthThreeYears             Float?
+  fcfGrowthFiveYears              Float?
+  forwardPe                       Float?
+  returnOnEquity5Year             Float?
+  returnOnAssets5Year             Float?
+  returnOnCapital5Year            Float?
   lastSplitDate                   String?
   lastStockSplit                  String?
   lastStockSplitRatio             String?
-  shortPercentFloat               String?
-  float                           String?
-  shortRatio                      String?
-  shortPercentShare               String?
-  beta1Year                       String?
-  epsGrowth3Year                  String?
-  epsGrowth5Year                  String?
-  netIncomeGrowth3Year            String?
-  netIncomeGrowth5Year            String?
-  operatingIncomeGrowth3Year      String?
-  operatingIncomeGrowth5Year      String?
-  grossProfit3Year                String?
-  grossProfit5Year                String?
-  revenueGrowth3Year              String?
-  revenueGrowth5Year              String?
+  shortPercentFloat               Float?
+  float                           Float?
+  shortRatio                      Float?
+  shortPercentShare               Float?
+  beta1Year                       Float?
+  epsGrowth3Year                  Float?
+  epsGrowth5Year                  Float?
+  netIncomeGrowth3Year            Float?
+  netIncomeGrowth5Year            Float?
+  operatingIncomeGrowth3Year      Float?
+  operatingIncomeGrowth5Year      Float?
+  grossProfit3Year                Float?
+  grossProfit5Year                Float?
+  revenueGrowth3Year              Float?
+  revenueGrowth5Year              Float?
   ipoDate                         String?
-  employees                       String?
-  premarketPercentageChg          String?
-  priceTargetPercentage           String?
-  previousClose                   String?
-  anaylystRating                  String?
-  analystCount                    String?
-  priceChange1Day                 String?
-  priceChange1Week                String?
-  priceChange1Month               String?
-  priceChange6Month               String?
-  priceChange1Year                String?
-  priceChangeThisYear             String?
-  priceChange3Year                String?
-  priceChange5Year                String?
-  priceChange10Year               String?
-  priceChange52WeekHigh           String?
-  priceChange52WeekLow            String?
-  RevOverEmployees                String?
-  piotroskiFScore                 String?
-  revGrowthNextYear               String?
-  revGrowthThisYear               String?
-  InvTurnover                     String?
-  PayoutFreq                      String?
-  AltmanZScore                    String?
-  revGrowthThisQuarter            String?
-  revGrowthNextQuarter            String?
-  shareholderYield                String?
-  relativeVolume                  String?
-  averageVolume                   String?
-  epsGrowthNextQuarter            String?
-  epsGrowthThisQuarter            String?
-  epsGrowthNextYear               String?
-  epsGrowthThisYear               String?
-  cashOverMarketCap               String?
+  employees                       Float?
+  premarketPercentageChg          Float?
+  priceTargetPercentage           Float?
+  previousClose                   Float?
+  anaylystRating                  Float?
+  analystCount                    Float?
+  priceChange1Day                 Float?
+  priceChange1Week                Float?
+  priceChange1Month               Float?
+  priceChange6Month               Float?
+  priceChange1Year                Float?
+  priceChangeThisYear             Float?
+  priceChange3Year                Float?
+  priceChange5Year                Float?
+  priceChange10Year               Float?
+  priceChange52WeekHigh           Float?
+  priceChange52WeekLow            Float?
+  RevOverEmployees                Float?
+  piotroskiFScore                 Float?
+  revGrowthNextYear               Float?
+  revGrowthThisYear               Float?
+  InvTurnover                     Float?
+  PayoutFreq                      Float?
+  AltmanZScore                    Float?
+  revGrowthThisQuarter            Float?
+  revGrowthNextQuarter            Float?
+  shareholderYield                Float?
+  relativeVolume                  Float?
+  averageVolume                   Float?
+  epsGrowthNextQuarter            Float?
+  epsGrowthThisQuarter            Float?
+  epsGrowthNextYear               Float?
+  epsGrowthThisYear               Float?
+  cashOverMarketCap               Float?
   financialReportDate             String?
-  volume                          String?
-  dividend                        String?
-  netCashOverDebtGrowth           String?
-  lastClosePrice                  String?
-  evOverEbitda                    String?
-  evOverEarnings                  String?
-  forwardEvOverSales              String?
-  pegRatio                        String?
-  forwardPs                       String?
-  taxOverRevenue                  String?
-  quickRatio                      String?
-  profOverEmployee                String?
+  volume                          Float?
+  dividend                        Float?
+  netCashOverDebtGrowth           Float?
+  lastClosePrice                  Float?
+  evOverEbitdaTTM                 Float?
+  evOverEarnings                  Float?
+  forwardEvOverSales              Float?
+  pegRatio                        Float?
+  forwardPs                       Float?
+  taxOverRevenue                  Float?
+  quickRatio                      Float?
+  profOverEmployee                Float?
   ExDividendDate                  String?
-  sharesInstitutions              String?
-  sharesInsiders                  String?
-  operatingMargin                 String?
+  sharesInstitutions              Float?
+  sharesInsiders                  Float?
+  operatingMargin                 Float?
   sector                          String?
   country                         String?
   exchange                        String?
-  grossProfit                     String?
-  costOfRevenue                   String?
-  sellingGeneralAdministrative    String?
-  researchDevelopment             String?
-  totalOperatingExpenses          String?
-  interestExpense                 String?
-  incomeBeforeTax                 String?
-  incomeTax                       String?
-  netIncome                       String?
-  epsActual                       String?
-  dilutedEspActual                String?
-  dividendShare                   String?
-  profitMargin                    String?
-  ebitda                          String?
-  ebitdaMargin                    String?
-  ebit                            String?
-  ebitMargin                      String?
-  depreciationAndAmortization     String?
-  freeCashFlowMargin              String?
-  grossMargin                     String?
-  cashAndEquivalents              String?
-  shortTermInvestments            String?
-  cashAndCashEquivalents          String?
-  cashAndShortTermInvestments     String?
-  receivables                     String?
-  inventory                       String?
-  otherCurrentAssets              String?
-  totalCurrentAssets              String?
-  propertyPlantAndEquipment       String?
-  longTermInvestments             String?
-  goodWillAndIntangibleAssets     String?
-  otherLongTermAssets             String?
-  totalLongTernAssets             String?
-  totalAssets                     String?
-  accountsPayable                 String?
-  deferredRevenue                 String?
-  currentDebt                     String?
-  otherCurrentLiabilities         String?
-  totalCurrentLiabilities         String?
-  longTernDebt                    String?
-  totalLongTermLiabilities        String?
-  totalLiabilities                String?
-  totalDebt                       String?
-  commonStock                     String?
-  retainedEarnings                String?
-  comprehensiveIncome             String?
-  shareHoldersEquity              String?
-  totalLiabilitiesAndEquity       String?
-  netCashOverDebt                 String?
-  netCashperShare                 String?
-  workingCapital                  String?
-  bookValuePerShare               String?
-  shareBasedCompensation          String?
-  otherOperatingActivities        String?
-  operatingCashFlow               String?
-  capitalExpenditures             String?
-  otherInvestingActivities        String?
-  investingCashFlow               String?
-  dividendPaid                    String?
-  shareIssuanceOverRepurchase     String?
-  otherFinanceActivities          String?
-  financeCashFlow                 String?
-  netCashFlow                     String?
-  freeCashFlow                    String?
-  freeCashFlowPerShare            String?
-  marketCapitalization            String?
-  enterpriseValue                 String?
-  peRatio                         String?
-  psRatio                         String?
-  pOverFcfRatio                   String?
-  pOverOcfRatio                   String?
-  evOverSalesRatio                String?
-  evEbitdaRatio                   String?
-  evEbitRatio                     String?
-  evFcfRatio                      String?
-  debtOverEquityRatio             String?
-  debtOverEbitdaRatio             String?
-  debtFcfRatio                    String?
-  currentRatio                    String?
-  assetTurnover                   String?
-  returnOnEquity                  String?
-  returnOnAssets                  String?
-  returnOnCapital                 String?
-  fcfYield                        String?
-  payoutRatio                     String?
-  revenueGrowthYOY                String?
-  netIncomeGrowthQ                String?
-  netIncomeGrowthY                String?
-  researchDevelopmentOverRevenueQ String?
-  researchDevelopmentOverRevenueY String?
-  dividendYieldQ                  String?
-  dividendYieldY                  String?
-  grossProfitGrowthQ              String?
-  grossProfitGrowthY              String?
-  fcfGrowthQ                      String?
-  fcfGrowthY                      String?
-  totalCashY                      String?
-  totalCashQ                      String?
-  priceOverFcfRatioQ              String?
-  priceOverFcfRatioY              String?
-  debtOverFcfQ                    String?
-  debtOverFcfY                    String?
-  evOverSalesYearly               String?
-  evOverSalesQuat                 String?
-  evOverEbitQuat                  String?
-  evOverEbitYearly                String?
-  evOverFcfQuat                   String?
-  evOverFcfYearly                 String?
-  buybackYieldQuat                String?
-  buybackYieldYearly              String?
-  earningYieldQ                   String?
-  earningYieldY                   String?
-  dividendGrowth                  String?
-  cashGrowth                      String?
-  debtGorwth                      String?
-  marketCapGrowth                 String?
-  epsGrowth                       String?
-  operatingIncome                 String?
-  opIncomeGrowthQuat              String?
-  opIncomeGrowthYearly            String?
-  revenueTTM                      String?
-  revenueGrowthYearly             String?
-  revenueGrowthQuat               String?
-  sharesChangeYearly              String?
-  sharesChangeQuarterly           String?
+  grossProfit                     Float?
+  costOfRevenue                   Float?
+  sellingGeneralAdministrative    Float?
+  researchDevelopment             Float?
+  totalOperatingExpenses          Float?
+  interestExpense                 Float?
+  incomeBeforeTax                 Float?
+  incomeTax                       Float?
+  netIncome                       Float?
+  epsActual                       Float?
+  dilutedEspActual                Float?
+  dividendShare                   Float?
+  profitMargin                    Float?
+  ebitda                          Float?
+  ebitdaMargin                    Float?
+  ebit                            Float?
+  ebitMargin                      Float?
+  depreciationAndAmortization     Float?
+  freeCashFlowMargin              Float?
+  grossMargin                     Float?
+  cashAndEquivalents              Float?
+  shortTermInvestments            Float?
+  cashAndCashEquivalents          Float?
+  cashAndShortTermInvestments     Float?
+  receivables                     Float?
+  inventory                       Float?
+  otherCurrentAssets              Float?
+  totalCurrentAssets              Float?
+  propertyPlantAndEquipment       Float?
+  longTermInvestments             Float?
+  goodWillAndIntangibleAssets     Float?
+  otherLongTermAssets             Float?
+  totalLongTernAssets             Float?
+  totalAssets                     Float?
+  accountsPayable                 Float?
+  deferredRevenue                 Float?
+  currentDebt                     Float?
+  otherCurrentLiabilities         Float?
+  totalCurrentLiabilities         Float?
+  longTernDebt                    Float?
+  totalLongTermLiabilities        Float?
+  totalLiabilities                Float?
+  totalDebt                       Float?
+  commonStock                     Float?
+  retainedEarnings                Float?
+  comprehensiveIncome             Float?
+  shareHoldersEquity              Float?
+  totalLiabilitiesAndEquity       Float?
+  netCashOverDebt                 Float?
+  netCashperShare                 Float?
+  workingCapital                  Float?
+  bookValuePerShare               Float?
+  shareBasedCompensation          Float?
+  otherOperatingActivities        Float?
+  operatingCashFlow               Float?
+  capitalExpenditures             Float?
+  otherInvestingActivities        Float?
+  investingCashFlow               Float?
+  dividendPaid                    Float?
+  shareIssuanceOverRepurchase     Float?
+  otherFinanceActivities          Float?
+  financeCashFlow                 Float?
+  netCashFlow                     Float?
+  freeCashFlow                    Float?
+  freeCashFlowPerShare            Float?
+  marketCapitalization            Float?
+  enterpriseValue                 Float?
+  peRatio                         Float?
+  psRatio                         Float?
+  pOverFcfRatio                   Float?
+  pOverOcfRatio                   Float?
+  evOverSalesRatio                Float?
+  evEbitdaRatio                   Float?
+  evEbitRatio                     Float?
+  evFcfRatio                      Float?
+  debtOverEquityRatio             Float?
+  debtOverEbitdaRatio             Float?
+  debtFcfRatio                    Float?
+  currentRatio                    Float?
+  assetTurnover                   Float?
+  returnOnEquity                  Float?
+  returnOnAssets                  Float?
+  returnOnCapital                 Float?
+  fcfYield                        Float?
+  payoutRatio                     Float?
+  revenueGrowthYOY                Float?
+  netIncomeGrowthQ                Float?
+  netIncomeGrowthY                Float?
+  researchDevelopmentOverRevenueQ Float?
+  researchDevelopmentOverRevenueY Float?
+  dividendYieldQ                  Float?
+  dividendYieldY                  Float?
+  grossProfitGrowthQ              Float?
+  grossProfitGrowthY              Float?
+  fcfGrowthQ                      Float?
+  fcfGrowthY                      Float?
+  totalCashY                      Float?
+  totalCashQ                      Float?
+  priceOverFcfRatioQ              Float?
+  priceOverFcfRatioY              Float?
+  debtOverFcfQ                    Float?
+  debtOverFcfY                    Float?
+  evOverSalesYearly               Float?
+  evOverSalesQuat                 Float?
+  evOverEbitQuat                  Float?
+  evOverEbitYearly                Float?
+  evOverFcfQuat                   Float?
+  evOverFcfYearly                 Float?
+  buybackYieldQuat                Float?
+  buybackYieldYearly              Float?
+  earningYieldQ                   Float?
+  earningYieldY                   Float?
+  dividendGrowth                  Float?
+  cashGrowth                      Float?
+  debtGorwth                      Float?
+  marketCapGrowth                 Float?
+  epsGrowth                       Float?
+  operatingIncome                 Float?
+  opIncomeGrowthQuat              Float?
+  opIncomeGrowthYearly            Float?
+  revenueTTM                      Float?
+  revenueGrowthYearly             Float?
+  revenueGrowthQuat               Float?
+  sharesChangeYearly              Float?
+  sharesChangeQuarterly           Float?
   Ticker                          Ticker?  @relation(fields: [tickerId], references: [id])
   tickerId                        Int?     @unique
   createdAt                       DateTime @default(now())
@@ -295,12 +295,12 @@ model General {
   GicIndustry           String?
   GicSubIndustry        String?
   HomeCategory          String?
-  IsDelisted            String?
+  IsDelisted            Boolean?
   Description           String?
   Address               String?
   Phone                 String?
   WebURL                String?
-  FullTimeEmployees     String?
+  FullTimeEmployees     Float?
   Officers              Officers[]
   Ticker                Ticker?    @relation(fields: [tickerId], references: [id])
   tickerId              Int?       @unique
@@ -323,12 +323,12 @@ model Earnings {
   id           Int      @id @default(autoincrement())
   Type         Type
   date         String?
-  earningsQuat String?
-  epsActual    String?
-  earningYield String?
-  epsGrowth    String?
-  peRatio      String?
-  epsEstimate  String?
+  earningsQuat Float?
+  epsActual    Float?
+  earningYield Float?
+  epsGrowth    Float?
+  peRatio      Float?
+  epsEstimate  Float?
   Ticker       Ticker?  @relation(fields: [tickerId], references: [id])
   tickerId     Int?
   createdAt    DateTime @default(now())
@@ -339,18 +339,18 @@ model EarningsTrand {
   id                     Int      @id @default(autoincrement())
   Type                   Type
   date                   String?
-  marketCap              String?
+  marketCap              Float?
   reportDate             String?
   beforeAfterMarket      String?
-  epsEstimateAvg         String?
-  epsEstimate            String?
-  revenueDifference      String?
-  revenueEstimateAvg     String?
-  epsActual              String?
-  totalRevenue           String?
-  epsDifference          String?
-  epsSurprisePercent     String?
-  revenueSurprisePercent String?
+  epsEstimateAvg         Float?
+  epsEstimate            Float?
+  revenueDifference      Float?
+  revenueEstimateAvg     Float?
+  epsActual              Float?
+  totalRevenue           Float?
+  epsDifference          Float?
+  epsSurprisePercent     Float?
+  revenueSurprisePercent Float?
   Ticker                 Ticker?  @relation(fields: [tickerId], references: [id])
   tickerId               Int?
   createdAt              DateTime @default(now())
@@ -361,9 +361,9 @@ model Dividend {
   id            Int      @id @default(autoincrement())
   Type          Type
   date          String?
-  dividendYield String?
-  dividendShare String?
-  payoutRatio   String?
+  dividendYield Float?
+  dividendShare Float?
+  payoutRatio   Float?
   Ticker        Ticker?  @relation(fields: [tickerId], references: [id])
   tickerId      Int?
   createdAt     DateTime @default(now())
@@ -377,8 +377,8 @@ model DividendHistory {
   recordDate      String?
   paymentDate     String?
   period          String?
-  value           String?
-  unadjustedValue String?
+  value           Float?
+  unadjustedValue Float?
   currency        String?
 
   Ticker    Ticker?  @relation(fields: [tickerId], references: [id])
@@ -392,18 +392,18 @@ model RatiosAndMetrics {
   Type                   Type
   date                   String?
   quater                 String?
-  marketCap              String?
-  evOverSalesRatio       String?
-  evOverEbitda           String?
-  TotalShareholderReturn String?
-  marketCapGrowth        String?
-  pOverOcfRatio          String?
-  enterpriseValue        String?
-  evOverEbit             String?
-  evOverSales            String?
-  evOverFcf              String?
-  fcfYield               String?
-  buybackYield           String?
+  marketCap              Float?
+  evOverSalesRatio       Float?
+  evOverEbitda           Float?
+  TotalShareholderReturn Float?
+  marketCapGrowth        Float?
+  pOverOcfRatio          Float?
+  enterpriseValue        Float?
+  evOverEbit             Float?
+  evOverSales            Float?
+  evOverFcf              Float?
+  fcfYield               Float?
+  buybackYield           Float?
   Ticker                 Ticker?  @relation(fields: [tickerId], references: [id])
   tickerId               Int?
   createdAt              DateTime @default(now())

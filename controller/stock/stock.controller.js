@@ -82,7 +82,8 @@ const { PrismaClient, Type } = require("@prisma/client");
 const {
   isValidNumber,
   convertValuesToArrayTypes,
-  stringifyValuesExceptSpecial
+  stringifyValuesExceptSpecial,
+  convertAttributesToNumber
 } = require("../../utils/stock/numberConverter");
 const { isValid } = require("zod");
 const dayjs = require("dayjs");
@@ -410,7 +411,7 @@ const populateOneTicker = async ({ ticker }) => {
               : null,
           epsGrowth:
             isValidNumber(item?.epsActual) && isValidNumber(prevEps?.epsActual)
-              ? calculateGrowth(item?.epsActual, prevEps?.epsActual)?.toString()
+              ? calculateGrowth(item?.epsActual, prevEps?.epsActual)
               : null,
           peRatio:
             isValidNumber(price?.close) && isValidNumber(item?.epsActual)
@@ -497,7 +498,7 @@ const populateOneTicker = async ({ ticker }) => {
             ? calculatePayoutRatio({
                 dividendShare: item?.value,
                 epsActual: sameInEarnings?.epsActual
-              })?.toString()
+              })
             : null
       };
     });
@@ -596,11 +597,10 @@ const populateOneTicker = async ({ ticker }) => {
             pOverOcfRatio:
               isValidNumber(Number(item?.shares) * Number(price?.close)) &&
               isValidNumber(sameInCashFlow?.totalCashFromOperatingActivities)
-                ? ((Number(item?.shares) * Number(price?.close)) /
+                ? (Number(item?.shares) * Number(price?.close)) /
                   sameInCashFlow?.totalCashFromOperatingActivities
-                    ? Number(sameInCashFlow?.totalCashFromOperatingActivities)
-                    : null
-                  )?.toString()
+                  ? Number(sameInCashFlow?.totalCashFromOperatingActivities)
+                  : null
                 : null,
             marketCapGrowth:
               outstandingSharesQuatRes.length >= index + 1 &&
@@ -731,11 +731,6 @@ const populateOneTicker = async ({ ticker }) => {
           (b_item) => b_item?.QuaterNum === item?.QuaterNum
         );
 
-        const marketCapGrowth = marketCapGrowthQuat.find(
-          (b_item) => b_item?.dateFormatted === item?.dateFormatted
-        );
-        // this is for calculating marketcapGrowth
-
         const response = ({ price }) => {
           return {
             date: item?.dateFormatted,
@@ -766,10 +761,8 @@ const populateOneTicker = async ({ ticker }) => {
             pOverOcfRatio:
               isValidNumber(Number(item?.shares) * Number(price?.close)) &&
               isValidNumber(sameInCashFlow?.totalCashFromOperatingActivities)
-                ? (
-                    (Number(item?.shares) * Number(price?.close)) /
-                    Number(sameInCashFlow?.totalCashFromOperatingActivities)
-                  )?.toString()
+                ? (Number(item?.shares) * Number(price?.close)) /
+                  Number(sameInCashFlow?.totalCashFromOperatingActivities)
                 : null,
             marketCapGrowth:
               outstandingSharesQuatRes.length >= index + 1 &&
@@ -817,13 +810,13 @@ const populateOneTicker = async ({ ticker }) => {
               marketCap: Number(item?.shares) * Number(price?.close),
               netDebt: sameInBalanceSheet?.netDebt,
               cashAndEquivalents: sameInBalanceSheet?.cashAndEquivalents
-            })?.toString(),
+            }),
             evOverEbit: calculateEvOverEbit({
               ebit: sameInIncomeStatement?.ebit,
               marketCap: Number(item?.shares) * Number(price?.close),
               netDebt: sameInBalanceSheet?.netDebt,
               cashAndEquivalents: sameInBalanceSheet?.cashAndEquivalents
-            })?.toString(),
+            }),
             evOverSales: calculateEvOverSales({
               enterpriseValue: calculateEnterpriseValue({
                 marketCap: Number(item?.shares) * Number(price?.close),
@@ -831,7 +824,7 @@ const populateOneTicker = async ({ ticker }) => {
                 cashAndEquivalents: sameInBalanceSheet?.cashAndEquivalents
               }),
               totalRevenue: sameInIncomeStatement?.totalRevenue
-            })?.toString(),
+            }),
             evOverFcf: sameInCashFlow
               ? calculateEvOverFcf({
                   enterpriseValue: calculateEnterpriseValue({
@@ -840,19 +833,19 @@ const populateOneTicker = async ({ ticker }) => {
                     cashAndEquivalents: sameInBalanceSheet?.cashAndEquivalents
                   }),
                   freeCashFlow: sameInCashFlow?.freeCashFlow
-                })?.toString()
+                })
               : null,
             fcfYield: sameInCashFlow
               ? calcualteFcfYield({
                   freeCashFlow: sameInCashFlow?.freeCashFlow,
                   MarketCapitalization:
                     Number(item?.shares) * Number(price?.close)
-                })?.toString()
+                })
               : null,
             buybackYield: calculateBuybackYield({
               salePurchaseOfStock: sameInCashFlow?.salePurchaseOfStock,
               marketCap: Number(item?.shares) * Number(price?.close)
-            })?.toString()
+            })
           };
         };
 
@@ -932,10 +925,7 @@ const populateOneTicker = async ({ ticker }) => {
           ),
           cashGrowth:
             balanceSheet_quat_org.length >= index + 1 &&
-            calculateGrowth(
-              item?.cash,
-              balanceSheet_quat_org[index + 1]?.cash
-            )?.toString(),
+            calculateGrowth(item?.cash, balanceSheet_quat_org[index + 1]?.cash),
           netReceivables: isValidNumber(item?.netReceivables),
           otherCurrentAssets: isValidNumber(item?.otherCurrentAssets),
           inventory: isValidNumber(item?.inventory),
@@ -966,10 +956,8 @@ const populateOneTicker = async ({ ticker }) => {
           currentRatio:
             isValidNumber(item.totalCurrentAssets) &&
             isValidNumber(Number(item.totalCurrentLiabilities))
-              ? (
-                  Number(item.totalCurrentAssets) /
-                  Number(item.totalCurrentLiabilities)
-                )?.toString()
+              ? Number(item.totalCurrentAssets) /
+                Number(item.totalCurrentLiabilities)
               : null,
 
           totalAssets: isValidNumber(item?.totalAssets),
@@ -1100,7 +1088,7 @@ const populateOneTicker = async ({ ticker }) => {
             calculateGrowth(
               item?.cash,
               balanceSheet_yearly_org[index + 1]?.cash
-            )?.toString(),
+            ),
           netReceivables: isValidNumber(item?.netReceivables),
           otherCurrentAssets: isValidNumber(item?.otherCurrentAssets),
           totalCurrentAssets: isValidNumber(item?.totalCurrentAssets),
@@ -1158,7 +1146,7 @@ const populateOneTicker = async ({ ticker }) => {
             shortTermDebt: item?.shortTermDebt,
             longTermDebt: item?.longTermDebt,
             dividedBy: sameInCashFlow?.freeCashFlow
-          })?.toString(),
+          }),
           shareHolderEquity: isValidNumber(item?.totalStockholderEquity),
           workingCapital: isValidNumber(item?.netWorkingCapital),
           assetTurnover:
@@ -1240,7 +1228,7 @@ const populateOneTicker = async ({ ticker }) => {
         freeCashFlowMargin: calculateMargin(
           item?.freeCashFlow,
           sameInIncomeStatement?.totalRevenue
-        )?.toString(),
+        ),
         salePurchaseOfStock: isValidNumber(item?.salePurchaseOfStock),
         invCashFlow: isValidNumber(item?.totalCashflowsFromInvestingActivities),
         changeToInventory: isValidNumber(item?.changeToInventory),
@@ -1324,7 +1312,7 @@ const populateOneTicker = async ({ ticker }) => {
           freeCashFlowMargin: calculateMargin(
             item?.freeCashFlow,
             sameInIncomeStatement?.totalRevenue
-          )?.toString(),
+          ),
           financingCashFlow: isValidNumber(
             item?.totalCashFromFinancingActivities
           ),
@@ -1405,16 +1393,16 @@ const populateOneTicker = async ({ ticker }) => {
       );
 
       return {
-        date: item?.date?.toString(),
+        date: item?.date,
         epsDifference: isValidNumber(sameInEarningHistoryQuat?.epsDifference),
         epsSurprisePercent: isValidNumber(
           sameInEarningHistoryQuat?.surprisePercent
         ),
         marketCap: isValidNumber(sameInRatiosAndMetrics?.marketCap),
         reportDate: sameInEarningHistoryQuat?.reportDate,
-        beforeAfterMarket: isValidNumber(
-          sameInEarningHistoryQuat?.beforeAfterMarket
-        ),
+        beforeAfterMarket: sameInEarningHistoryQuat?.beforeAfterMarket
+          ? sameInEarningHistoryQuat?.beforeAfterMarket
+          : null,
         revenueDifference:
           isValidNumber(item?.totalRevenue) -
           isValidNumber(sameInIncomeStatementQuat?.revenueEstimateAvg),
@@ -1458,11 +1446,13 @@ const populateOneTicker = async ({ ticker }) => {
       );
 
       return {
-        date: item?.date?.toString(),
+        date: item?.date,
         marketCap: sameInRatiosAndMetrics?.marketCap,
         reportDate: sameInEarningHistoryYearly?.reportDate,
         beforeAfterMarket: sameInEarningHistoryYearly?.beforeAfterMarket,
-        totalRevenue: sameInIncomeStatementYearly?.totalRevenue,
+        totalRevenue:
+          sameInIncomeStatementYearly?.totalRevenue &&
+          parseFloat(sameInIncomeStatementYearly?.totalRevenue),
         epsActual: sameInEarningHistoryYearly?.epsActual,
         epsEstimate: sameInEarningHistoryYearly?.epsEstimate,
         epsDifference: sameInEarningHistoryYearly?.epsDifference,
@@ -1540,7 +1530,7 @@ const populateOneTicker = async ({ ticker }) => {
           dividendGrowth: dividendGrowth?.growth,
           epsActual: isValidNumber(sameInHistory?.epsActual),
           ebitdaGrowth: ebitdaGrowth?.growth,
-          // epsGrowth: calculateGrowth(epsActual(), previousActual())?.toString(),
+          // epsGrowth: calculateGrowth(epsActual(), previousActual())  ,
           epsGrowth: epsGrowth?.growth,
           sharesOutDiluted: isValidNumber(
             sameInBalanceSheet?.commonStockSharesOutstanding
@@ -1584,7 +1574,7 @@ const populateOneTicker = async ({ ticker }) => {
           revenueGrowth: calculateGrowth(
             item?.totalRevenue,
             incomeStatement_quat_org[index + 1]?.totalRevenue
-          )?.toString(),
+          ),
           grossMargin:
             calculateGrossMargin(item?.totalRevenue, item?.costOfRevenue) ||
             null,
@@ -1839,7 +1829,7 @@ const populateOneTicker = async ({ ticker }) => {
         balanceSheet_quat_org[0]?.totalAssets,
         balanceSheet_quat_org[0]?.totalLiab
       ),
-      earningsDate: earningsDate?.toString(),
+      earningsDate: earningsDate,
       sharesOutTTM: isValidNumber(SharesOutstanding),
       earningYieldQ: isValidNumber(earningsQuat[0]?.earningYield),
       earningYieldY: isValidNumber(earningsYearly[0]?.earningYield),
@@ -1898,7 +1888,7 @@ const populateOneTicker = async ({ ticker }) => {
         ? calculateGrowth(
             cashFlow_yearly_org[0]?.freeCashFlow,
             cashFlow_yearly_org[3]?.freeCashFlow
-          )?.toString()
+          )
         : null,
       fcfGrowthFiveYears: isValidNumber(
         calculateGrowth(
@@ -1909,15 +1899,15 @@ const populateOneTicker = async ({ ticker }) => {
         ? calculateGrowth(
             cashFlow_yearly_org[0]?.freeCashFlow,
             cashFlow_yearly_org[5]?.freeCashFlow
-          )?.toString()
+          )
         : null,
-      forwardPe: isValidNumber(ForwardPE) ? ForwardPE?.toString() : null,
+      forwardPe: isValidNumber(ForwardPE) ? ForwardPE : null,
       returnOnEquity5Year: isValidNumber(ReoEquity5year),
       returnOnAssets5Year: isValidNumber(ReoAssets5year),
       returnOnCapital5Year: isValidNumber(ROC5Year),
-      lastSplitDate: isValidNumber(LastSplitDate),
-      lastStockSplit: isValidNumber(splitFactor),
-      lastStockSplitRatio: isValidNumber(LastStockSplitRatio),
+      lastSplitDate: LastSplitDate,
+      lastStockSplit: splitFactor,
+      lastStockSplitRatio: LastStockSplitRatio,
       float: isValidNumber(SharesFloat),
       shortRatio: isValidNumber(ShortRatio),
       shortPercentShare: isValidNumber(ShortPercentShare),
@@ -1943,14 +1933,12 @@ const populateOneTicker = async ({ ticker }) => {
       forwardPs:
         isValidNumber(PriceChange[PriceChange?.length - 1]?.close) &&
         isValidNumber(trendInEarnings[0]?.revenueEstimateAvg)
-          ? (
-              PriceChange[PriceChange?.length - 1]?.close?.toString() /
-              trendInEarnings[0]?.revenueEstimateAvg
-            )?.toString()
+          ? PriceChange[PriceChange?.length - 1]?.close /
+            trendInEarnings[0]?.revenueEstimateAvg
           : null,
       premarketPercentageChg: null,
       // premarketPercentageChg: PriceChanges?.PremktPercentChg
-      //   ? PriceChanges.PremktPercentChg?.toString()
+      //   ? PriceChanges.PremktPercentChg
       //   : null,
       premarketPrice: null,
       priceTargetPercentage: isValidNumber(PriceTargetPer),
@@ -1966,21 +1954,17 @@ const populateOneTicker = async ({ ticker }) => {
       priceChange3Year: null,
       priceChange5Year: null,
       priceChange10Year: null,
-      // priceChange1Day: PriceChanges.PriceChange1D?.toString(),
+      // priceChange1Day: PriceChanges.PriceChange1D  ,
       // priceChange1Week: PriceChanges?.PriceChange1W.toString(),
-      // priceChange1Month: PriceChanges?.PriceChange1M?.toString(),
-      // priceChange6Month: PriceChanges?.PriceChange6M?.toString(),
-      // priceChange1Year: PriceChanges?.PriceChange1Y?.toString(),
-      // priceChangeThisYear: PriceChanges?.PriceChangeThisYear?.toString(),
-      // priceChange3Year: PriceChanges?.PriceChange3Y?.toString(),
-      // priceChange5Year: PriceChanges?.PriceChange5Y?.toString(),
-      // priceChange10Year: PriceChanges?.PriceChange10Y?.toString(),
-      priceChange52WeekHigh: isValidNumber(WeekHigh52)
-        ? WeekHigh52?.toString()
-        : null,
-      priceChange52WeekLow: isValidNumber(WeekLow52)
-        ? WeekLow52?.toString()
-        : null,
+      // priceChange1Month: PriceChanges?.PriceChange1M  ,
+      // priceChange6Month: PriceChanges?.PriceChange6M  ,
+      // priceChange1Year: PriceChanges?.PriceChange1Y  ,
+      // priceChangeThisYear: PriceChanges?.PriceChangeThisYear  ,
+      // priceChange3Year: PriceChanges?.PriceChange3Y  ,
+      // priceChange5Year: PriceChanges?.PriceChange5Y  ,
+      // priceChange10Year: PriceChanges?.PriceChange10Y  ,
+      priceChange52WeekHigh: isValidNumber(WeekHigh52) ? WeekHigh52 : null,
+      priceChange52WeekLow: isValidNumber(WeekLow52) ? WeekLow52 : null,
       sharesChange: {
         sharesChangeYearly: isValidNumber(
           calculateGrowth(
@@ -1991,16 +1975,16 @@ const populateOneTicker = async ({ ticker }) => {
           ? calculateGrowth(
               outstandingSharesAnnual[0]?.shares,
               outstandingSharesAnnual[1]?.shares
-            )?.toString()
+            )
           : null,
         sharesChangeQuarterly: calculateGrowth(
           outstandingSharesQuat[0]?.shares,
           outstandingSharesQuat[1]?.shares
-        )?.toString()
+        )
       },
       RevOverEmployees:
         isValidNumber(RevenueTTM) && isValidNumber(FullTimeEmployees)
-          ? (RevenueTTM / FullTimeEmployees)?.toString()
+          ? RevenueTTM / FullTimeEmployees
           : null,
       piotroskiFScore:
         calculatePiotroskiFScore({
@@ -2041,12 +2025,21 @@ const populateOneTicker = async ({ ticker }) => {
             lastYear: balanceSheet_yearly[0]?.assetTurnover,
             prevYear: balanceSheet_yearly[1]?.assetTurnover
           }
-        })?.toString() || null,
+        }) || null,
       revGrowthNextYear: isValidNumber(revGrowthNextYear({ trendInEarnings })),
       revGrowthThisYear: isValidNumber(revGrowthThisYear({ trendInEarnings })),
-      InvTurnover:
-        (
-          sumUpRecentQuarter({
+      InvTurnover: isValidNumber(
+        sumUpRecentQuarter({
+          data: mostRecentDateObject,
+          propertyName: "costOfRevenue"
+        }) /
+          (sumUpRecentQuarter({
+            data: mostRecentDateBalanceSheetQuarterly,
+            propertyName: "inventory"
+          }) /
+            4)
+      )
+        ? sumUpRecentQuarter({
             data: mostRecentDateObject,
             propertyName: "costOfRevenue"
           }) /
@@ -2055,33 +2048,21 @@ const populateOneTicker = async ({ ticker }) => {
             propertyName: "inventory"
           }) /
             4)
-        )?.toString() !== "NaN"
-          ? (
-              sumUpRecentQuarter({
-                data: mostRecentDateObject,
-                propertyName: "costOfRevenue"
-              }) /
-              (sumUpRecentQuarter({
-                data: mostRecentDateBalanceSheetQuarterly,
-                propertyName: "inventory"
-              }) /
-                4)
-            )?.toString()
-          : null,
-      PayoutFreq: getMostRecentYearObject(dividendInfo)?.Count?.toString(),
+        : null,
+      PayoutFreq: getMostRecentYearObject(dividendInfo)?.Count,
       AltmanZScore: calculateAltmanZScore(
         data,
         Number(PriceChange[PriceChange?.length - 1]?.close)
-      )?.toString(),
+      ),
       revGrowthThisQuarter: revenueEstimateGrowth({
         trendInEarnings,
         MostRecentQuarter
-      })?.toString(),
+      }),
 
       revGrowthNextQuarter: revenueEstimateGrowthNextQuat({
         trendInEarnings,
         MostRecentQuarter
-      })?.toString(),
+      }),
       shareholderYield:
         isValidNumber(dividendsQuat[dividendsQuat.length - 1]?.dividendYield) &&
         isValidNumber(ratiosAndMetricsQuat[0]?.buybackYield)
@@ -2089,27 +2070,27 @@ const populateOneTicker = async ({ ticker }) => {
               dividendYield:
                 dividendsQuat[dividendsQuat.length - 1]?.dividendYield,
               buybackYield: ratiosAndMetricsQuat[0]?.buybackYield
-            })?.toString()
+            })
           : null,
       relativeVolume: calculateGrowth(
         avgvol[avgvol.length - 1]?.avgvol,
         PriceChange[PriceChange?.length - 1]?.volume
-      )?.toString(),
-      averageVolume: avgvol[avgvol?.length - 1]?.avgvol?.toString(),
-      epsGrowthNextQuarter: EPSEstimateNextQuarter?.toString(),
-      epsGrowthThisQuarter: EPSEstimateCurrentQuarter?.toString(),
-      epsGrowthNextYear: EPSEstimateNextYear?.toString(),
-      epsGrowthThisYear: EPSEstimateCurrentYear?.toString(),
+      ),
+      averageVolume: avgvol[avgvol?.length - 1]?.avgvol,
+      epsGrowthNextQuarter: EPSEstimateNextQuarter,
+      epsGrowthThisQuarter: EPSEstimateCurrentQuarter,
+      epsGrowthNextYear: EPSEstimateNextYear,
+      epsGrowthThisYear: EPSEstimateCurrentYear,
       cashOverMarketCap: calculateCashOverMarketCap({
         cashAndEquivalents: calculateTTM({
           array: balanceSheet_quat_org,
           variableName: "cashAndEquivalents"
         }),
         MarketCapitalization
-      })?.toString(),
+      }),
       financialReportDate: financialReportDate(),
-      volume: PriceChange[PriceChange?.length - 1]?.volume?.toString(),
-      dividend: ForwardAnnualDividendRate?.toString(),
+      volume: PriceChange[PriceChange?.length - 1]?.volume,
+      dividend: ForwardAnnualDividendRate,
       netCashOverDebtGrowth:
         isValidNumber(balanceSheet_quat_org[0]?.cash) &&
         isValidNumber(balanceSheet_quat_org[0]?.shortTermDebt) &&
@@ -2124,10 +2105,10 @@ const populateOneTicker = async ({ ticker }) => {
                 cash: balanceSheet_yearly_org[0]?.cash,
                 shortTermDebt: balanceSheet_yearly_org[0]?.shortTermDebt
               }
-            })?.toString()
+            })
           : null,
       lastClosePrice: isValidNumber(PriceChange[PriceChange?.length - 1]?.close)
-        ? PriceChange[PriceChange?.length - 1]?.close?.toString()
+        ? PriceChange[PriceChange?.length - 1]?.close
         : null,
       priceChnage: calculateRevenuePrecent({
         current: PriceChange[PriceChange?.length - 1]?.close,
@@ -2137,25 +2118,25 @@ const populateOneTicker = async ({ ticker }) => {
       // isValidNumber(PriceChange[PriceChange?.length - 1]?.close) &&
       // isValidNumber(TargetPrice)
       //   ? ((isValidNumber(
-      //       PriceChange[PriceChange?.length - 1]?.close?.toString()
+      //       PriceChange[PriceChange?.length - 1]?.close
       //     ) -
       //       isValidNumber(TargetPrice)) /
       //       isValidNumber(TargetPrice)) *
       //     100
       //   : null,
-      evOverEbitda:
+      evOverEbitdaTTM:
         EnterpriseValue && EBITDA
           ? calculateEvOverEbitda({
               EnterpriseValue,
               ebitda: EBITDA
-            })?.toString()
+            })
           : null,
       evOverEarnings:
         EnterpriseValue && cashFlow_yearly_org[0]?.netIncome
           ? calculateEvOverEarnings({
               EnterpriseValue,
               netIncome: cashFlow_yearly_org[0]?.netIncome
-            })?.toString()
+            })
           : null,
       forwardEvOverSales: isValidNumber(
         calculateForwardEvOverSales({
@@ -2168,9 +2149,9 @@ const populateOneTicker = async ({ ticker }) => {
             EnterpriseValue,
             revenueEstimateAvg: Object.values(data?.Earnings?.Trend)[0]
               ?.revenueEstimateAvg
-          })?.toString()
+          })
         : null,
-      pegRatio: isValidNumber(PEGRatio) ? PEGRatio?.toString() : null,
+      pegRatio: isValidNumber(PEGRatio) ? PEGRatio : null,
       incomeTaxExpense: isValidNumber(
         incomeStatement_yearly_org[0]?.incomeTaxExpense
       )
@@ -2182,7 +2163,7 @@ const populateOneTicker = async ({ ticker }) => {
           ? calculateTaxOverRevenue({
               incomeTaxExpense: incomeStatement_yearly_org[0]?.incomeTaxExpense,
               incomeBeforeTax: incomeStatement_yearly_org[0]?.incomeBeforeTax
-            })?.toString()
+            })
           : null,
       quickRatio:
         isValidNumber(balanceSheet_quat_org[0]?.cash) &&
@@ -2200,57 +2181,54 @@ const populateOneTicker = async ({ ticker }) => {
               netReceivables: balanceSheet_quat_org[1]?.netReceivables,
               totalCurrentLiabilities:
                 balanceSheet_quat_org[0]?.totalCurrentLiabilities
-            })?.toString()
+            })
           : null,
-      profOverEmployee: (isValidNumber(cashFlow_quat_org[0]?.netIncome) &&
-      isValidNumber(FullTimeEmployees)
-        ? Number(cashFlow_quat_org[0]?.netIncome) / FullTimeEmployees
-        : null
-      )?.toString(),
+      profOverEmployee:
+        isValidNumber(cashFlow_quat_org[0]?.netIncome) &&
+        isValidNumber(FullTimeEmployees)
+          ? Number(cashFlow_quat_org[0]?.netIncome) / FullTimeEmployees
+          : null,
       ExDividendDate: isValidNumber(ExDividendDate)
         ? ExDividendDate
         : ExDividendDate,
       sharesInstitutions: isValidNumber(PercentInstitutions)
-        ? PercentInstitutions?.toString()
+        ? PercentInstitutions
         : null,
-      sharesInsiders: isValidNumber(PercentInsiders)
-        ? PercentInsiders?.toString()
-        : null,
+      sharesInsiders: isValidNumber(PercentInsiders) ? PercentInsiders : null,
       operatingMargin: isValidNumber(OperatingMarginTTM)
-        ? OperatingMarginTTM?.toString()
+        ? OperatingMarginTTM
         : null,
-      industry: isValidNumber(industry),
-      sector: Sector ? Sector : null,
-      country: country ? country : null,
-      exchange: isValidNumber(Exchange),
+      industry: industry,
+      sector: Sector,
+      country: country,
+      exchange: Exchange,
       revenue: {
-        revenueTTM: isValidNumber(RevenueTTM) ? RevenueTTM?.toString() : null,
-        revenueGrowthYearly:
-          incomeStatement_yearly[0]?.revenueGrowth?.toString(),
-        revenueGrowthQuat: incomeStatement_quat[0]?.revenueGrowth?.toString()
+        revenueTTM: isValidNumber(RevenueTTM) ? RevenueTTM : null,
+        revenueGrowthYearly: incomeStatement_yearly[0]?.revenueGrowth,
+        revenueGrowthQuat: incomeStatement_quat[0]?.revenueGrowth
       },
       grossProfit: isValidNumber(GrossProfitTTM),
       costOfRevenue: calculateTTM({
         array: incomeStatement_quat_org,
         variableName: "costOfRevenue"
-      })?.toString(),
+      }),
       sellingGeneralAdministrative: calculateTTM({
         array: incomeStatement_quat_org,
         variableName: "sellingGeneralAdministrative"
-      })?.toString(),
+      }),
       researchDevelopment: calculateTTM({
         array: incomeStatement_quat_org,
         variableName: "researchDevelopment"
-      })?.toString(),
+      }),
       totalOperatingExpenses: calculateTTM({
         array: incomeStatement_quat_org,
         variableName: "totalOperatingExpenses"
-      })?.toString(),
+      }),
       operatingIncome: {
         operatingIncome: calculateTTM({
           array: incomeStatement_quat_org,
           variableName: "operatingIncome"
-        })?.toString(),
+        }),
         opIncomeGrowthQuat: isValidNumber(
           incomeStatement_quat[0]?.opIncomeGrowth
         ),
@@ -2261,19 +2239,19 @@ const populateOneTicker = async ({ ticker }) => {
       interestExpense: calculateTTM({
         array: incomeStatement_quat_org,
         variableName: "interestExpense"
-      })?.toString(),
+      }),
       incomeBeforeTax: calculateTTM({
         array: incomeStatement_quat_org,
         variableName: "incomeBeforeTax"
-      })?.toString(),
+      }),
       incomeTax: calculateTTM({
         array: incomeStatement_quat_org,
         variableName: "incomeTaxExpense"
-      })?.toString(),
+      }),
       netIncome: calculateTTM({
         array: incomeStatement_quat_org,
         variableName: "netIncome"
-      })?.toString(),
+      }),
       epsActual: epsActual(),
       dilutedEspActual: isValidNumber(DilutedEpsTTM),
       dividendShare: isValidNumber(DividendShare),
@@ -2283,16 +2261,16 @@ const populateOneTicker = async ({ ticker }) => {
       ebitda: isValidNumber(EBITDA),
       ebitdaMargin: isValidNumber(calculateMargin(EBITDA, RevenueTTM)),
 
-      ebit: incomeStatement_quat_org[0]?.ebit?.toString(),
+      ebit: incomeStatement_quat_org[0]?.ebit,
       ebitMargin:
         calculateMargin(
           incomeStatement_quat_org[0]?.ebit,
           incomeStatement_quat_org[0]?.totalRevenue
-        )?.toString() || null,
+        ) || null,
       depreciationAndAmortization: calculateTTM({
         array: incomeStatement_quat_org,
         variableName: "depreciationAndAmortization"
-      })?.toString(),
+      }),
       freeCashFlowMargin: isValidNumber(
         cashFlow_quat_org[0]?.capitalExpenditures
       ),
@@ -2302,7 +2280,7 @@ const populateOneTicker = async ({ ticker }) => {
           ? calculateGrossMargin(
               RevenueTTM,
               incomeStatement_quat_org[0]?.costOfRevenue
-            )?.toString()
+            )
           : null,
       cashAndEquivalents: isValidNumber(
         balanceSheet_quat_org[0]?.cashAndEquivalents
@@ -2333,10 +2311,8 @@ const populateOneTicker = async ({ ticker }) => {
       goodWillAndIntangibleAssets:
         isValidNumber(balanceSheet_quat_org[0]?.goodWill) &&
         isValidNumber(balanceSheet_quat_org[0]?.intangibleAssets)
-          ? (
-              Number(balanceSheet_quat_org[0]?.goodWill) +
-              Number(balanceSheet_quat_org[0]?.intangibleAssets)
-            )?.toString()
+          ? Number(balanceSheet_quat_org[0]?.goodWill) +
+            Number(balanceSheet_quat_org[0]?.intangibleAssets)
           : null,
       otherLongTermAssets: isValidNumber(balanceSheet_quat_org[0]?.otherAssets),
       totalLongTernAssets: isValidNumber(
@@ -2362,10 +2338,8 @@ const populateOneTicker = async ({ ticker }) => {
       totalDebt:
         isValidNumber(Number(balanceSheet_quat_org[0]?.shortTermDebt)) &&
         isValidNumber(Number(balanceSheet_quat_org[0]?.longTermDebt))
-          ? (
-              Number(balanceSheet_quat_org[0]?.shortTermDebt) +
-              Number(balanceSheet_quat_org[0]?.longTermDebt)
-            )?.toString()
+          ? Number(balanceSheet_quat_org[0]?.shortTermDebt) +
+            Number(balanceSheet_quat_org[0]?.longTermDebt)
           : null,
       commonStock: isValidNumber(balanceSheet_quat_org[0]?.commonStock),
       retainedEarnings: isValidNumber(
@@ -2383,20 +2357,16 @@ const populateOneTicker = async ({ ticker }) => {
       netCashOverDebt:
         isValidNumber(balanceSheet_quat_org[0]?.cash) &&
         isValidNumber(balanceSheet_quat_org[0]?.shortTermDebt)
-          ? (
-              Number(balanceSheet_quat_org[0]?.cash) /
-              Number(balanceSheet_quat_org[0]?.shortTermDebt)
-            )?.toString()
+          ? Number(balanceSheet_quat_org[0]?.cash) /
+            Number(balanceSheet_quat_org[0]?.shortTermDebt)
           : null,
       netCashperShare:
         isValidNumber(balanceSheet_quat_org[0]?.cash) &&
         isValidNumber(balanceSheet_quat_org[0]?.shortTermDebt) &&
         isValidNumber(SharesOutstanding)
-          ? (
-              Number(balanceSheet_quat_org[0]?.cash) /
-              Number(balanceSheet_quat_org[0]?.shortTermDebt) /
-              SharesOutstanding
-            )?.toString()
+          ? Number(balanceSheet_quat_org[0]?.cash) /
+            Number(balanceSheet_quat_org[0]?.shortTermDebt) /
+            SharesOutstanding
           : null,
       workingCapital: isValidNumber(
         balanceSheet_quat_org[0]?.netWorkingCapital
@@ -2405,205 +2375,181 @@ const populateOneTicker = async ({ ticker }) => {
       netIncome: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "netIncome"
-      })?.toString(),
+      }),
       depreciationAndAmortization: calculateTTM({
         array: incomeStatement_quat_org,
         variableName: "depreciationAndAmortization"
-      })?.toString(),
+      }),
       shareBasedCompensation: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "stockBasedCompensation"
-      })?.toString(),
+      }),
       otherOperatingActivities: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "otherCashflowsFromInvestingActivities"
-      })?.toString(),
+      }),
       operatingCashFlow: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "totalCashFromOperatingActivities"
-      })?.toString(),
+      }),
       capitalExpenditures: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "capitalExpenditures"
-      })?.toString(),
+      }),
       otherInvestingActivities: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "changeToInventory"
-      })?.toString(),
+      }),
       investingCashFlow: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "totalCashflowsFromInvestingActivities"
-      })?.toString(),
+      }),
       dividendPaid: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "dividendsPaid"
-      })?.toString(),
+      }),
       shareIssuanceOverRepurchase: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "salePurchaseOfStock"
-      })?.toString(),
+      }),
       otherFinanceActivities: isValidNumber(
         cashFlow_quat_org[0]?.otherCashflowsFromFinancingActivities
       ),
       financeCashFlow: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "totalCashFromFinancingActivities"
-      })?.toString(),
+      }),
       netCashFlow: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "changeInCash"
-      })?.toString(),
+      }),
       freeCashFlow: calculateTTM({
         array: cashFlow_quat_org,
         variableName: "freeCashFlow"
-      })?.toString(),
+      }),
       freeCashFlowMargin: calculateMargin(
         cashFlow_quat_org[0]?.freeCashFlow,
         incomeStatement_quat_org[0]?.totalRevenue
-      )?.toString(),
+      ),
       freeCashFlowPerShare:
         isValidNumber(Number(cashFlow_quat_org[0]?.freeCashFlow)) &&
         isValidNumber(SharesOutstanding)
-          ? (
-              Number(cashFlow_quat_org[0]?.freeCashFlow) / SharesOutstanding
-            )?.toString()
+          ? Number(cashFlow_quat_org[0]?.freeCashFlow) / SharesOutstanding
           : null,
       marketCapitalization: isValidNumber(MarketCapitalization),
       enterpriseValue: isValidNumber(EnterpriseValue),
       peRatio: isValidNumber(PERatio),
       psRatio: isValidNumber(RevenueTTM)
-        ? (MarketCapitalization / RevenueTTM)?.toString()
+        ? MarketCapitalization / RevenueTTM
         : null,
       pOverFcfRatio:
         isValidNumber(MarketCapitalization) &&
         isValidNumber(Number(cashFlow_quat_org[0]?.freeCashFlow))
-          ? (
-              MarketCapitalization / Number(cashFlow_quat_org[0]?.freeCashFlow)
-            )?.toString()
+          ? MarketCapitalization / Number(cashFlow_quat_org[0]?.freeCashFlow)
           : null,
       pOverOcfRatio:
         isValidNumber(MarketCapitalization) &&
         isValidNumber(cashFlow_quat_org[0]?.totalCashFromOperatingActivities)
-          ? (
-              MarketCapitalization /
-              Number(cashFlow_quat_org[0]?.totalCashFromOperatingActivities)
-            )?.toString()
+          ? MarketCapitalization /
+            Number(cashFlow_quat_org[0]?.totalCashFromOperatingActivities)
           : null,
       evOverSalesRatio: isValidNumber(RevenueTTM)
-        ? (EnterpriseValue / RevenueTTM)?.toString()
+        ? EnterpriseValue / RevenueTTM
         : null,
       evEbitdaRatio:
         isValidNumber(EnterpriseValue) &&
         isValidNumber(incomeStatement_quat_org[0]?.ebitda)
-          ? (
-              EnterpriseValue / Number(incomeStatement_quat_org[0]?.ebitda)
-            )?.toString()
+          ? EnterpriseValue / Number(incomeStatement_quat_org[0]?.ebitda)
           : null,
       evEbitRatio:
         Number(incomeStatement_quat_org[0]?.ebit) &&
         isValidNumber(Number(incomeStatement_quat_org[0]?.ebit))
-          ? (
-              EnterpriseValue / Number(incomeStatement_quat_org[0]?.ebit)
-            )?.toString()
+          ? EnterpriseValue / Number(incomeStatement_quat_org[0]?.ebit)
           : null,
       evFcfRatio:
         isValidNumber(EnterpriseValue) &&
         isValidNumber(Number(cashFlow_quat_org[0]?.freeCashFlow))
-          ? (
-              EnterpriseValue / Number(cashFlow_quat_org[0]?.freeCashFlow)
-            )?.toString()
+          ? EnterpriseValue / Number(cashFlow_quat_org[0]?.freeCashFlow)
           : null,
       debtOverEquityRatio:
         isValidNumber(Number(balanceSheet_quat_org[0]?.shortTermDebt)) &&
         isValidNumber(Number(balanceSheet_quat_org[0]?.longTermDebt)) &&
         isValidNumber(Number(balanceSheet_quat_org[0]?.totalStockholderEquity))
-          ? (
-              Number(balanceSheet_quat_org[0]?.shortTermDebt) +
-              Number(balanceSheet_quat_org[0]?.longTermDebt) -
-              Number(balanceSheet_quat_org[0]?.totalStockholderEquity)
-            )?.toString()
+          ? Number(balanceSheet_quat_org[0]?.shortTermDebt) +
+            Number(balanceSheet_quat_org[0]?.longTermDebt) -
+            Number(balanceSheet_quat_org[0]?.totalStockholderEquity)
           : null,
       debtOverEbitdaRatio:
         isValidNumber(Number(balanceSheet_quat_org[0]?.shortTermDebt)) &&
         isValidNumber(Number(balanceSheet_quat_org[0]?.longTermDebt)) &&
         isValidNumber(incomeStatement_quat_org[0]?.ebitda)
-          ? (
-              Number(balanceSheet_quat_org[0]?.shortTermDebt) +
-              Number(balanceSheet_quat_org[0]?.longTermDebt) -
-              Number(incomeStatement_quat_org[0]?.ebitda)
-            )?.toString()
+          ? Number(balanceSheet_quat_org[0]?.shortTermDebt) +
+            Number(balanceSheet_quat_org[0]?.longTermDebt) -
+            Number(incomeStatement_quat_org[0]?.ebitda)
           : null,
       debtFcfRatio:
         isValidNumber(Number(balanceSheet_quat_org[0]?.shortTermDebt)) &&
         isValidNumber(Number(balanceSheet_quat_org[0]?.longTermDebt)) &&
         isValidNumber(Number(cashFlow_quat_org[0]?.freeCashFlow))
-          ? (
-              Number(balanceSheet_quat_org[0]?.shortTermDebt) +
-              Number(balanceSheet_quat_org[0]?.longTermDebt) -
-              Number(cashFlow_quat_org[0]?.freeCashFlow)
-            )?.toString()
+          ? Number(balanceSheet_quat_org[0]?.shortTermDebt) +
+            Number(balanceSheet_quat_org[0]?.longTermDebt) -
+            Number(cashFlow_quat_org[0]?.freeCashFlow)
           : null,
       currentRatio:
         balanceSheet_quat_org &&
         balanceSheet_quat_org[0]?.totalCurrentLiabilities &&
         isValidNumber(balanceSheet_quat_org[0]?.totalCurrentLiabilities)
-          ? (
-              Number(balanceSheet_quat_org[0]?.totalCurrentAssets) /
-              Number(balanceSheet_quat_org[0]?.totalCurrentLiabilities)
-            )?.toString()
+          ? Number(balanceSheet_quat_org[0]?.totalCurrentAssets) /
+            Number(balanceSheet_quat_org[0]?.totalCurrentLiabilities)
           : null,
       assetTurnover:
         isValidNumber(RevenueTTM) &&
         isValidNumber(Number(balanceSheet_quat_org[0]?.totalAssets))
-          ? (
-              RevenueTTM / Number(balanceSheet_quat_org[0]?.totalAssets)
-            )?.toString()
+          ? RevenueTTM / Number(balanceSheet_quat_org[0]?.totalAssets)
           : null,
       returnOnEquity: calculateMargin(
         incomeStatement_quat_org[0]?.netIncome,
         balanceSheet_quat_org[0]?.totalStockholderEquity
-      )?.toString(),
+      ),
       returnOnAssets: calculateMargin(
         incomeStatement_quat_org[0]?.netIncome,
         balanceSheet_quat_org[0]?.totalAssets
-      )?.toString(),
+      ),
       returnOnCapital: calculateMargin(
         incomeStatement_quat_org[0]?.ebit,
         balanceSheet_quat_org[0]?.netInvestedCapital
-      )?.toString(),
+      ),
       fcfYield: calculateMargin(
         cashFlow_quat_org[0]?.freeCashFlow,
         MarketCapitalization
-      )?.toString(),
-      payoutRatio: calculateMargin(DividendShare, epsActual())?.toString(),
+      ),
+      payoutRatio: calculateMargin(DividendShare, epsActual()),
       revenueGrowthYOY: calculateGrowth(
         cashFlow_quat_org[0]?.freeCashFlow,
         cashFlow_quat_org[1]?.freeCashFlow
-      )?.toString(),
+      ),
       netIncomeGrowthQ: calculateGrowth(
         incomeStatement_quat_org[0]?.netIncome,
         incomeStatement_quat_org[1]?.netIncome
-      )?.toString(),
+      ),
       netIncomeGrowthY: calculateGrowth(
         incomeStatement_yearly_org[0]?.netIncome,
         incomeStatement_yearly_org[1]?.netIncome
-      )?.toString(),
+      ),
       dividendGrowth: calculateGrowth(
         cashFlow_yearly_org[0]?.dividendsPaid,
         cashFlow_yearly_org[1]?.dividendsPaid
-      )?.toString(),
+      ),
       cashGrowth: calculateGrowth(
         balanceSheet_quat_org[0]?.cash,
         balanceSheet_quat_org[1]?.cash
-      )?.toString(),
+      ),
       debtGorwth:
         isValidNumber(balanceSheet_quat_org[0]?.shortTermDebt) &&
         isValidNumber(balanceSheet_quat_org[1]?.shortTermDebt)
-          ? (
-              Number(balanceSheet_quat_org[0]?.shortTermDebt) /
-                Number(balanceSheet_quat_org[1]?.shortTermDebt) -
-              1 * 100
-            )?.toString()
+          ? Number(balanceSheet_quat_org[0]?.shortTermDebt) /
+              Number(balanceSheet_quat_org[1]?.shortTermDebt) -
+            1 * 100
           : null,
       marketCapGrowth: isValidNumber(
         calculateGrowth(
@@ -2614,9 +2560,9 @@ const populateOneTicker = async ({ ticker }) => {
         ? calculateGrowth(
             ratiosAndMetricsQuat[0]?.marketCap,
             ratiosAndMetricsQuat[1]?.marketCap
-          )?.toString()
+          )
         : null,
-      epsGrowth: calculateGrowth(epsActual(), previousActual())?.toString()
+      epsGrowth: calculateGrowth(epsActual(), previousActual())
     };
 
     // // ============= talha end TTM ===============
@@ -2631,8 +2577,9 @@ const populateOneTicker = async ({ ticker }) => {
     if (!TickerId) {
       throw new Error(`Ticker by id ${TickerId.id} not found!`);
     }
+    const OfficersData = convertValuesToArrayTypes(Officers);
 
-    stringifyValuesExceptSpecial(General);
+    // stringifyValuesExceptSpecial(General);
 
     const newGeneral = { ...General };
     delete newGeneral?.AddressData;
@@ -2642,7 +2589,6 @@ const populateOneTicker = async ({ ticker }) => {
     delete newGeneral?.Officers;
     delete newGeneral?.DelistedDate;
     delete newGeneral?.UpdatedAt;
-    const OfficersData = convertValuesToArrayTypes(Officers);
     const GeneralPromise = prisma.general.create({
       data: {
         ...newGeneral,
@@ -2659,7 +2605,7 @@ const populateOneTicker = async ({ ticker }) => {
       }
     });
 
-    stringifyValuesExceptSpecial(TTM);
+    convertAttributesToNumber(TTM);
 
     const newTTM = { ...TTM };
     delete newTTM?.sharesChange;
@@ -2737,7 +2683,9 @@ const populateOneTicker = async ({ ticker }) => {
         });
       }
     );
+
     const convertedEarningsTrendsQuat = convertValuesToArrayTypes(trendsQuat);
+
     const earningsPromisesTrendsQuat = convertedEarningsTrendsQuat.map(
       (convertedEarningsTrendsQuat) => {
         return prisma.earningsTrand.create({
@@ -2754,8 +2702,10 @@ const populateOneTicker = async ({ ticker }) => {
         });
       }
     );
+
     const convertedEarningsTrendsYearly =
       convertValuesToArrayTypes(trendsYearly);
+
     const earningsPromisesTrendsYearly = convertedEarningsTrendsYearly.map(
       (convertedEarningsTrendsYearly) => {
         return prisma.earningsTrand.create({
@@ -2840,160 +2790,161 @@ const populateOneTicker = async ({ ticker }) => {
         });
       }
     );
-    const convertedcashFlowYearly = convertValuesToArrayTypes(cashFlow_yearly);
-    const cashFlowPromisesYearly = convertedcashFlowYearly.map(
-      (convertedcashFlowYearly) => {
-        return prisma.cashFlow.create({
-          data: {
-            ...convertedcashFlowYearly,
-            Type: Type.YEARLY,
-            Ticker: {
-              connect: {
-                id: TickerId.id
-              }
-            }
-          }
-        });
-      }
-    );
+    // const convertedcashFlowYearly = convertValuesToArrayTypes(cashFlow_yearly);
+    // const cashFlowPromisesYearly = convertedcashFlowYearly.map(
+    //   (convertedcashFlowYearly) => {
+    //     return prisma.cashFlow.create({
+    //       data: {
+    //         ...convertedcashFlowYearly,
+    //         Type: Type.YEARLY,
+    //         Ticker: {
+    //           connect: {
+    //             id: TickerId.id
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
+    // );
 
-    const convertedcashFlowQuat = convertValuesToArrayTypes(cashFlow_quat);
-    const cashFlowPromisesQuaterly = convertedcashFlowQuat.map(
-      (convertedcashFlowQuat) => {
-        return prisma.cashFlow.create({
-          data: {
-            ...convertedcashFlowQuat,
-            Type: Type.QUARTERLY,
-            Ticker: {
-              connect: {
-                id: TickerId.id
-              }
-            }
-          }
-        });
-      }
-    );
+    // const convertedcashFlowQuat = convertValuesToArrayTypes(cashFlow_quat);
+    // const cashFlowPromisesQuaterly = convertedcashFlowQuat.map(
+    //   (convertedcashFlowQuat) => {
+    //     return prisma.cashFlow.create({
+    //       data: {
+    //         ...convertedcashFlowQuat,
+    //         Type: Type.QUARTERLY,
+    //         Ticker: {
+    //           connect: {
+    //             id: TickerId.id
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
+    // );
 
-    const convertedincomeStatementQuaterly =
-      convertValuesToArrayTypes(incomeStatement_quat);
+    // const convertedincomeStatementQuaterly =
+    //   convertValuesToArrayTypes(incomeStatement_quat);
 
-    const incomeStatementPromisesQuaterly =
-      convertedincomeStatementQuaterly.map(
-        (convertedincomeStatementQuaterly) => {
-          return prisma.incomeStatement.create({
-            data: {
-              ...convertedincomeStatementQuaterly,
-              Type: Type.QUARTERLY,
-              Ticker: {
-                connect: {
-                  id: TickerId.id
-                }
-              }
-            }
-          });
-        }
-      );
-    const convertedincomeStatementyearly = convertValuesToArrayTypes(
-      incomeStatement_yearly
-    );
+    // const incomeStatementPromisesQuaterly =
+    //   convertedincomeStatementQuaterly.map(
+    //     (convertedincomeStatementQuaterly) => {
+    //       return prisma.incomeStatement.create({
+    //         data: {
+    //           ...convertedincomeStatementQuaterly,
+    //           Type: Type.QUARTERLY,
+    //           Ticker: {
+    //             connect: {
+    //               id: TickerId.id
+    //             }
+    //           }
+    //         }
+    //       });
+    //     }
+    //   );
+    // const convertedincomeStatementyearly = convertValuesToArrayTypes(
+    //   incomeStatement_yearly
+    // );
 
-    const incomeStatementPromisesyearly = convertedincomeStatementyearly.map(
-      (convertedincomeStatementyearly) => {
-        return prisma.incomeStatement.create({
-          data: {
-            ...convertedincomeStatementyearly,
-            Type: Type.YEARLY,
-            Ticker: {
-              connect: {
-                id: TickerId.id
-              }
-            }
-          }
-        });
-      }
-    );
-    const convertedbalanceSheetyearly =
-      convertValuesToArrayTypes(balanceSheet_yearly);
-    const balanceSheetPromisesyearly = convertedbalanceSheetyearly.map(
-      (convertedbalanceSheetyearly) => {
-        return prisma.balanceSheet.create({
-          data: {
-            ...convertedbalanceSheetyearly,
-            Type: Type.YEARLY,
-            Ticker: {
-              connect: {
-                id: TickerId.id
-              }
-            }
-          }
-        });
-      }
-    );
+    // const incomeStatementPromisesyearly = convertedincomeStatementyearly.map(
+    //   (convertedincomeStatementyearly) => {
+    //     return prisma.incomeStatement.create({
+    //       data: {
+    //         ...convertedincomeStatementyearly,
+    //         Type: Type.YEARLY,
+    //         Ticker: {
+    //           connect: {
+    //             id: TickerId.id
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
+    // );
+    // const convertedbalanceSheetyearly =
+    //   convertValuesToArrayTypes(balanceSheet_yearly);
+    // const balanceSheetPromisesyearly = convertedbalanceSheetyearly.map(
+    //   (convertedbalanceSheetyearly) => {
+    //     return prisma.balanceSheet.create({
+    //       data: {
+    //         ...convertedbalanceSheetyearly,
+    //         Type: Type.YEARLY,
+    //         Ticker: {
+    //           connect: {
+    //             id: TickerId.id
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
+    // );
 
-    const convertedbalanceSheetQuat =
-      convertValuesToArrayTypes(balanceSheet_quat);
-    const balanceSheetPromisesQuat = convertedbalanceSheetQuat.map(
-      (convertedbalanceSheetQuat) => {
-        return prisma.balanceSheet.create({
-          data: {
-            ...convertedbalanceSheetQuat,
-            Type: Type.QUARTERLY,
-            Ticker: {
-              connect: {
-                id: TickerId.id
-              }
-            }
-          }
-        });
-      }
-    );
+    // const convertedbalanceSheetQuat =
+    //   convertValuesToArrayTypes(balanceSheet_quat);
+    // const balanceSheetPromisesQuat = convertedbalanceSheetQuat.map(
+    //   (convertedbalanceSheetQuat) => {
+    //     return prisma.balanceSheet.create({
+    //       data: {
+    //         ...convertedbalanceSheetQuat,
+    //         Type: Type.QUARTERLY,
+    //         Ticker: {
+    //           connect: {
+    //             id: TickerId.id
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
+    // );
 
     const [
       TTMRes,
       GeneralRes,
       dividendsHistoryRes,
-      earningsQuaterlyRes,
-      earningsYearlyRes,
+      // earningsQuaterlyRes,
+      // earningsYearlyRes,
       dividendsYearlyRes,
       dividendsQuarterlyRes,
       ratiosAndMetricsYearlyRes,
-      cashFlowQuateRes,
-      cashFlowYearlyRes,
-      cashFlowQuatRes,
-      incomeStatementQuaterlyRes,
-      incomeStatementyearlyRes,
-      balanceSheetyearlyRes,
-      balanceSheetQuatRes,
-      earningsTrendResQuat,
-      earningsTrendResYearly
+      ratiosAndMetricsQuatRes
+      // cashFlowQuateRes,
+      // cashFlowYearlyRes,
+      // cashFlowQuatRes,
+      // incomeStatementQuaterlyRes,
+      // incomeStatementyearlyRes,
+      // balanceSheetyearlyRes,
+      // balanceSheetQuatRes,
+      // earningsTrendResQuat,
+      // earningsTrendResYearly
     ] = await prisma.$transaction([
       TTMPromise,
       GeneralPromise,
-      ...dividendsHistory,
       ...earningsPromisesQuat,
       ...earningsPromisesYearly,
+      ...earningsPromisesTrendsQuat,
+      ...dividendsHistory,
       ...dividendsPromisesYearly,
       ...dividendsPromisesQuarterly,
       ...ratiosAndMetricsPromisesYearly,
       ...ratiosAndMetricsPromisesQuater,
-      ...cashFlowPromisesYearly,
-      ...cashFlowPromisesQuaterly,
-      ...incomeStatementPromisesQuaterly,
-      ...incomeStatementPromisesyearly,
-      ...balanceSheetPromisesyearly,
-      ...balanceSheetPromisesQuat,
-      ...earningsPromisesTrendsQuat,
+      // ...cashFlowPromisesYearly,
+      // ...cashFlowPromisesQuaterly,
+      // ...incomeStatementPromisesQuaterly,
+      // ...incomeStatementPromisesyearly,
+      // ...balanceSheetPromisesyearly,
+      // ...balanceSheetPromisesQuat,
       ...earningsPromisesTrendsYearly
     ]);
 
-    const GeneralExist = await prisma.general.findFirst({
-      where: {
-        tickerId: TickerId?.id
-      }
-    });
-    if (!GeneralExist) {
-      throw new Error(`General by id ${GeneralExist?.id} not found!`);
-    }
+    // const GeneralExist = await prisma.general.findFirst({
+    //   where: {
+    //     tickerId: TickerId?.id
+    //   }
+    // });
+    // if (!GeneralExist) {
+    //   throw new Error(`General by id ${GeneralExist?.id} not found!`);
+    // }
 
     const findActive = await prisma.lastTicker.findMany({});
     if (findActive.length > 0) {
@@ -3016,23 +2967,23 @@ const populateOneTicker = async ({ ticker }) => {
     }
 
     return {
-      TTMRes,
-      GeneralRes,
-      dividendsHistoryRes,
-      earningsQuaterlyRes,
-      earningsYearlyRes,
-      dividendsYearlyRes,
-      dividendsQuarterlyRes,
-      ratiosAndMetricsYearlyRes,
-      cashFlowQuateRes,
-      cashFlowYearlyRes,
-      cashFlowQuatRes,
-      incomeStatementQuaterlyRes,
-      incomeStatementyearlyRes,
-      balanceSheetyearlyRes,
-      balanceSheetQuatRes,
-      earningsTrendResQuat,
-      earningsTrendResYearly
+      TTMRes
+      // GeneralRes,
+      // dividendsHistoryRes,
+      // earningsQuaterlyRes,
+      // earningsYearlyRes,
+      // dividendsYearlyRes,
+      // dividendsQuarterlyRes,
+      // ratiosAndMetricsYearlyRes,
+      // cashFlowQuateRes,
+      // cashFlowYearlyRes,
+      // cashFlowQuatRes,
+      // incomeStatementQuaterlyRes,
+      // incomeStatementyearlyRes,
+      // balanceSheetyearlyRes,
+      // balanceSheetQuatRes,
+      // earningsTrendResQuat,
+      // earningsTrendResYearly
     };
   } catch (error) {
     console.log("error=========================>>", error);

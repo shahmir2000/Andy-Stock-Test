@@ -1,8 +1,6 @@
 const zeroPattern = /^0+(\.0+)?$/;
 
 function isValidNumber(input) {
-  // console.log("inputOuter=========>", temp, input);
-  // Check if the input is a number or a string that can be converted to a number
   if (
     typeof input === "number" ||
     (typeof input === "string" && !isNaN(Number(input)))
@@ -32,6 +30,10 @@ function convertAttributesToNumber(obj) {
       if (
         key.includes("date") ||
         key.includes("Date") ||
+        key.includes("MostRecentQuarter") ||
+        key.includes("lastStockSplit") ||
+        key.includes("lastStockSplitRatio") ||
+        key.includes("YearBorn") ||
         key.includes("EmployerIdNumber")
       ) {
         obj[key].toString();
@@ -76,7 +78,7 @@ function convertValuesToArrayTypes(obj) {
     } else if (typeof value === "object") {
       convertedObj[key] = convertValuesToArrayTypes(value);
     } else {
-      convertedObj[key] = value.toString();
+      convertedObj[key] = value;
     }
 
     return convertedObj;
@@ -94,7 +96,7 @@ function stringifyValuesExceptSpecial(obj) {
       if (typeof obj[key] === "object") {
         stringifyValuesExceptSpecial(obj[key]); // Recurse into nested object
       } else {
-        obj[key] = String(obj[key]);
+        obj[key] = parseFloat(obj[key]);
       }
     }
   }
