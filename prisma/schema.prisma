@@ -1,0 +1,560 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Type {
+  QUARTERLY
+  YEARLY
+}
+
+model lastTicker {
+  id               Int      @id @default(autoincrement())
+  lastActiveTicker String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now())
+}
+
+model Ticker {
+  id               Int                @id @default(autoincrement())
+  ticker           String?            @unique()
+  company          String?
+  TTM              TTM?
+  General          General?
+  Earnings         Earnings[]
+  Dividend         Dividend[]
+  RatiosAndMetrics RatiosAndMetrics[]
+  CashFlow         CashFlow[]
+  IncomeStatement  IncomeStatement[]
+  BalanceSheet     BalanceSheet[]
+  EarningsTrand    EarningsTrand[]
+  DividendHistory  DividendHistory[]
+  Industries       Industries?        @relation(fields: [industriesId], references: [id])
+  industriesId     Int?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+}
+
+model TTM {
+  id                              Int      @id @default(autoincrement())
+  premarketPrice                  String?
+  priceChnage                     String?
+  StrongBuy                       String?
+  TargetPrice                     String?
+  Buy                             String?
+  Hold                            String?
+  Sell                            String?
+  StrongSell                      String?
+  MostRecentQuarter               String?
+  earningsDate                    String?
+  sharesOutTTM                    String?
+  preMarketDate                   String?
+  industry                        String?
+  pbRatio                         String?
+  founded                         String?
+  TotalShareholderReturn          String?
+  incomeTaxExpense                String?
+  fcfGrowthThreeYears             String?
+  fcfGrowthFiveYears              String?
+  forwardPe                       String?
+  returnOnEquity5Year             String?
+  returnOnAssets5Year             String?
+  returnOnCapital5Year            String?
+  lastSplitDate                   String?
+  lastStockSplit                  String?
+  lastStockSplitRatio             String?
+  shortPercentFloat               String?
+  float                           String?
+  shortRatio                      String?
+  shortPercentShare               String?
+  beta1Year                       String?
+  epsGrowth3Year                  String?
+  epsGrowth5Year                  String?
+  netIncomeGrowth3Year            String?
+  netIncomeGrowth5Year            String?
+  operatingIncomeGrowth3Year      String?
+  operatingIncomeGrowth5Year      String?
+  grossProfit3Year                String?
+  grossProfit5Year                String?
+  revenueGrowth3Year              String?
+  revenueGrowth5Year              String?
+  ipoDate                         String?
+  employees                       String?
+  premarketPercentageChg          String?
+  priceTargetPercentage           String?
+  previousClose                   String?
+  anaylystRating                  String?
+  analystCount                    String?
+  priceChange1Day                 String?
+  priceChange1Week                String?
+  priceChange1Month               String?
+  priceChange6Month               String?
+  priceChange1Year                String?
+  priceChangeThisYear             String?
+  priceChange3Year                String?
+  priceChange5Year                String?
+  priceChange10Year               String?
+  priceChange52WeekHigh           String?
+  priceChange52WeekLow            String?
+  RevOverEmployees                String?
+  piotroskiFScore                 String?
+  revGrowthNextYear               String?
+  revGrowthThisYear               String?
+  InvTurnover                     String?
+  PayoutFreq                      String?
+  AltmanZScore                    String?
+  revGrowthThisQuarter            String?
+  revGrowthNextQuarter            String?
+  shareholderYield                String?
+  relativeVolume                  String?
+  averageVolume                   String?
+  epsGrowthNextQuarter            String?
+  epsGrowthThisQuarter            String?
+  epsGrowthNextYear               String?
+  epsGrowthThisYear               String?
+  cashOverMarketCap               String?
+  financialReportDate             String?
+  volume                          String?
+  dividend                        String?
+  netCashOverDebtGrowth           String?
+  lastClosePrice                  String?
+  evOverEbitda                    String?
+  evOverEarnings                  String?
+  forwardEvOverSales              String?
+  pegRatio                        String?
+  forwardPs                       String?
+  taxOverRevenue                  String?
+  quickRatio                      String?
+  profOverEmployee                String?
+  ExDividendDate                  String?
+  sharesInstitutions              String?
+  sharesInsiders                  String?
+  operatingMargin                 String?
+  sector                          String?
+  country                         String?
+  exchange                        String?
+  grossProfit                     String?
+  costOfRevenue                   String?
+  sellingGeneralAdministrative    String?
+  researchDevelopment             String?
+  totalOperatingExpenses          String?
+  interestExpense                 String?
+  incomeBeforeTax                 String?
+  incomeTax                       String?
+  netIncome                       String?
+  epsActual                       String?
+  dilutedEspActual                String?
+  dividendShare                   String?
+  profitMargin                    String?
+  ebitda                          String?
+  ebitdaMargin                    String?
+  ebit                            String?
+  ebitMargin                      String?
+  depreciationAndAmortization     String?
+  freeCashFlowMargin              String?
+  grossMargin                     String?
+  cashAndEquivalents              String?
+  shortTermInvestments            String?
+  cashAndCashEquivalents          String?
+  cashAndShortTermInvestments     String?
+  receivables                     String?
+  inventory                       String?
+  otherCurrentAssets              String?
+  totalCurrentAssets              String?
+  propertyPlantAndEquipment       String?
+  longTermInvestments             String?
+  goodWillAndIntangibleAssets     String?
+  otherLongTermAssets             String?
+  totalLongTernAssets             String?
+  totalAssets                     String?
+  accountsPayable                 String?
+  deferredRevenue                 String?
+  currentDebt                     String?
+  otherCurrentLiabilities         String?
+  totalCurrentLiabilities         String?
+  longTernDebt                    String?
+  totalLongTermLiabilities        String?
+  totalLiabilities                String?
+  totalDebt                       String?
+  commonStock                     String?
+  retainedEarnings                String?
+  comprehensiveIncome             String?
+  shareHoldersEquity              String?
+  totalLiabilitiesAndEquity       String?
+  netCashOverDebt                 String?
+  netCashperShare                 String?
+  workingCapital                  String?
+  bookValuePerShare               String?
+  shareBasedCompensation          String?
+  otherOperatingActivities        String?
+  operatingCashFlow               String?
+  capitalExpenditures             String?
+  otherInvestingActivities        String?
+  investingCashFlow               String?
+  dividendPaid                    String?
+  shareIssuanceOverRepurchase     String?
+  otherFinanceActivities          String?
+  financeCashFlow                 String?
+  netCashFlow                     String?
+  freeCashFlow                    String?
+  freeCashFlowPerShare            String?
+  marketCapitalization            String?
+  enterpriseValue                 String?
+  peRatio                         String?
+  psRatio                         String?
+  pOverFcfRatio                   String?
+  pOverOcfRatio                   String?
+  evOverSalesRatio                String?
+  evEbitdaRatio                   String?
+  evEbitRatio                     String?
+  evFcfRatio                      String?
+  debtOverEquityRatio             String?
+  debtOverEbitdaRatio             String?
+  debtFcfRatio                    String?
+  currentRatio                    String?
+  assetTurnover                   String?
+  returnOnEquity                  String?
+  returnOnAssets                  String?
+  returnOnCapital                 String?
+  fcfYield                        String?
+  payoutRatio                     String?
+  revenueGrowthYOY                String?
+  netIncomeGrowthQ                String?
+  netIncomeGrowthY                String?
+  researchDevelopmentOverRevenueQ String?
+  researchDevelopmentOverRevenueY String?
+  dividendYieldQ                  String?
+  dividendYieldY                  String?
+  grossProfitGrowthQ              String?
+  grossProfitGrowthY              String?
+  fcfGrowthQ                      String?
+  fcfGrowthY                      String?
+  totalCashY                      String?
+  totalCashQ                      String?
+  priceOverFcfRatioQ              String?
+  priceOverFcfRatioY              String?
+  debtOverFcfQ                    String?
+  debtOverFcfY                    String?
+  evOverSalesYearly               String?
+  evOverSalesQuat                 String?
+  evOverEbitQuat                  String?
+  evOverEbitYearly                String?
+  evOverFcfQuat                   String?
+  evOverFcfYearly                 String?
+  buybackYieldQuat                String?
+  buybackYieldYearly              String?
+  earningYieldQ                   String?
+  earningYieldY                   String?
+  dividendGrowth                  String?
+  cashGrowth                      String?
+  debtGorwth                      String?
+  marketCapGrowth                 String?
+  epsGrowth                       String?
+  operatingIncome                 String?
+  opIncomeGrowthQuat              String?
+  opIncomeGrowthYearly            String?
+  revenueTTM                      String?
+  revenueGrowthYearly             String?
+  revenueGrowthQuat               String?
+  sharesChangeYearly              String?
+  sharesChangeQuarterly           String?
+  Ticker                          Ticker?  @relation(fields: [tickerId], references: [id])
+  tickerId                        Int?     @unique
+  createdAt                       DateTime @default(now())
+  updatedAt                       DateTime @default(now())
+}
+
+model General {
+  id                    Int        @id @default(autoincrement())
+  Type                  String?
+  Name                  String?
+  Exchange              String?
+  CurrencyCode          String?
+  CurrencyName          String?
+  CurrencySymbol        String?
+  CountryName           String?
+  CountryISO            String?
+  OpenFigi              String?
+  ISIN                  String?
+  LEI                   String?
+  PrimaryTicker         String?
+  CUSIP                 String?
+  CIK                   String?
+  EmployerIdNumber      String?
+  FiscalYearEnd         String?
+  IPODate               String?
+  InternationalDomestic String?
+  Sector                String?
+  Industry              String?
+  GicSector             String?
+  GicGroup              String?
+  GicIndustry           String?
+  GicSubIndustry        String?
+  HomeCategory          String?
+  IsDelisted            String?
+  Description           String?
+  Address               String?
+  Phone                 String?
+  WebURL                String?
+  FullTimeEmployees     String?
+  Officers              Officers[]
+  Ticker                Ticker?    @relation(fields: [tickerId], references: [id])
+  tickerId              Int?       @unique
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @default(now())
+}
+
+model Officers {
+  id        Int      @id @default(autoincrement())
+  Name      String?
+  Title     String?
+  YearBorn  String?
+  General   General? @relation(fields: [generalId], references: [id])
+  generalId Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Earnings {
+  id           Int      @id @default(autoincrement())
+  Type         Type
+  date         String?
+  earningsQuat String?
+  epsActual    String?
+  earningYield String?
+  epsGrowth    String?
+  peRatio      String?
+  epsEstimate  String?
+  Ticker       Ticker?  @relation(fields: [tickerId], references: [id])
+  tickerId     Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+}
+
+model EarningsTrand {
+  id                     Int      @id @default(autoincrement())
+  Type                   Type
+  date                   String?
+  marketCap              String?
+  reportDate             String?
+  beforeAfterMarket      String?
+  epsEstimateAvg         String?
+  epsEstimate            String?
+  revenueDifference      String?
+  revenueEstimateAvg     String?
+  epsActual              String?
+  totalRevenue           String?
+  epsDifference          String?
+  epsSurprisePercent     String?
+  revenueSurprisePercent String?
+  Ticker                 Ticker?  @relation(fields: [tickerId], references: [id])
+  tickerId               Int?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @default(now())
+}
+
+model Dividend {
+  id            Int      @id @default(autoincrement())
+  Type          Type
+  date          String?
+  dividendYield String?
+  dividendShare String?
+  payoutRatio   String?
+  Ticker        Ticker?  @relation(fields: [tickerId], references: [id])
+  tickerId      Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+}
+
+model DividendHistory {
+  id              Int     @id @default(autoincrement())
+  date            String?
+  declarationDate String?
+  recordDate      String?
+  paymentDate     String?
+  period          String?
+  value           String?
+  unadjustedValue String?
+  currency        String?
+
+  Ticker    Ticker?  @relation(fields: [tickerId], references: [id])
+  tickerId  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model RatiosAndMetrics {
+  id                     Int      @id @default(autoincrement())
+  Type                   Type
+  date                   String?
+  quater                 String?
+  marketCap              String?
+  evOverSalesRatio       String?
+  evOverEbitda           String?
+  TotalShareholderReturn String?
+  marketCapGrowth        String?
+  pOverOcfRatio          String?
+  enterpriseValue        String?
+  evOverEbit             String?
+  evOverSales            String?
+  evOverFcf              String?
+  fcfYield               String?
+  buybackYield           String?
+  Ticker                 Ticker?  @relation(fields: [tickerId], references: [id])
+  tickerId               Int?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @default(now())
+}
+
+model CashFlow {
+  id                          Int      @id @default(autoincrement())
+  Type                        Type
+  freeCashFlowMargin          String?
+  freeCashFlowPerShare        String?
+  otherOperatingActivities    String?
+  financingCashFlow           String?
+  salePurchaseOfStock         String?
+  otherFinancingActivities    String?
+  changeToInventory           String?
+  depreciationAndAmortization String?
+  operatingCashFlowGrowth     String?
+  capitalExpenditures         String?
+  date                        String?
+  priceOverFcfRatio           String?
+  finCashFlow                 String?
+  invCashFlow                 String?
+  sharedBasedCompensation     String?
+  operatingCashFlow           String?
+  fcfGrowth                   String?
+  fcfOverShare                String?
+  netCashFlow                 String?
+  freeCashFlow                String?
+  returnOnEquity              String?
+  returnOnAssets              String?
+  Ticker                      Ticker?  @relation(fields: [tickerId], references: [id])
+  tickerId                    Int?
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @default(now())
+}
+
+model IncomeStatement {
+  id                             Int     @id @default(autoincrement())
+  Type                           Type
+  sellingGeneralAdministrative   String?
+  freeCashFlowPerShare           String?
+  CashFlowMargin                 String?
+  interestExpense                String?
+  totalOperatingExpenses         String?
+  incomeTaxExpense               String?
+  sharesOutDiluted               String?
+  costOfRevenue                  String?
+  incomeBeforeTax                String?
+  epsActual                      String?
+  dividendGrowth                 String?
+  depreciationAndAmortization    String?
+  ebitdaGrowth                   String?
+  date                           String?
+  netIncome                      String?
+  epsGrowth                      String?
+  netIncomeGrowth                String?
+  operatingIncome                String?
+  opIncomeGrowth                 String?
+  grossProfit                    String?
+  ebit                           String?
+  ebitda                         String?
+  grossProfitGrowth              String?
+  totalRevenue                   String?
+  revenueGrowth                  String?
+  grossMargin                    String?
+  operatingMargin                String?
+  profitMargin                   String?
+  fcfMargin                      String?
+  ebitdaMargin                   String?
+  ebitMargin                     String?
+  researchDevelopment            String?
+  researchDevelopmentOverRevenue String?
+  psRatio                        String?
+
+  Ticker    Ticker?  @relation(fields: [tickerId], references: [id])
+  tickerId  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model BalanceSheet {
+  id                                  Int      @id @default(autoincrement())
+  Type                                Type
+  date                                String?
+  deferredLongTermLiab                String?
+  cashAndEquivalents                  String?
+  shortTermInvestments                String?
+  cashAndShortTermInvestments         String?
+  cashGrowth                          String?
+  netReceivables                      String?
+  inventory                           String?
+  otherCurrentAssets                  String?
+  totalCurrentAssets                  String?
+  debtGrowth                          String?
+  longTermInvestments                 String?
+  accountsPayable                     String?
+  otherCurrentLiab                    String?
+  longTermDebtTotal                   String?
+  totalCurrentLiabilities             String?
+  shortTermDebt                       String?
+  otherAssets                         String?
+  nonCurrentAssetsTotal               String?
+  currentDeferredRevenue              String?
+  liabilitiesAndStockholdersEquity    String?
+  totalStockholderEquity              String?
+  retainedEarnings                    String?
+  accumulatedOtherComprehensiveIncome String?
+  commonStock                         String?
+  goodWillAndIntangibleAssets         String?
+  propertyPlantAndEquipmentNet        String?
+  netWorkingCapital                   String?
+  bookValue                           String?
+  netCashPerShare                     String?
+  sharesOut                           String?
+  netCashOverDebt                     String?
+  totalCash                           String?
+  totalDebt                           String?
+  currentRatio                        String?
+  totalAssets                         String?
+  totalLiab                           String?
+  pbRatio                             String?
+  debtOverEquity                      String?
+  debtOverEbitda                      String?
+  debtOverFcf                         String?
+  shareHolderEquity                   String?
+  workingCapital                      String?
+  assetTurnover                       String?
+  returnOnCapital                     String?
+  netCashOverDebtGrowth               String?
+  priceOverFcfRatio                   String?
+  Ticker                              Ticker?  @relation(fields: [tickerId], references: [id])
+  tickerId                            Int?
+  createdAt                           DateTime @default(now())
+  updatedAt                           DateTime @default(now())
+}
+
+model Sectors {
+  id         Int          @id @default(autoincrement())
+  Industries Industries[]
+  name       String       @unique
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
+}
+
+model Industries {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  Sectors   Sectors? @relation(fields: [sectorsId], references: [id])
+  sectorsId Int?
+  Ticker    Ticker[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
