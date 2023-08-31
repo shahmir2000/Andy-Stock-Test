@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const { convertNumbersInArray } = require("../../utils/stock/numberConverter");
+// const { convertNumbersInArray } = require("../../utils/stock/numberConverter");
 const prisma = new PrismaClient();
 
 const cashFlowResolver = {
@@ -17,11 +17,11 @@ const cashFlowResolver = {
         }
       });
 
-      const cashFlowQuarterly = convertNumbersInArray(
-        data?.CashFlow?.filter((item) => item.Type === "QUARTERLY")
+      const cashFlowQuarterly = data?.CashFlow?.filter(
+        (item) => item.Type === "QUARTERLY"
       );
-      const cashFlowYearly = convertNumbersInArray(
-        data?.CashFlow?.filter((item) => item.Type === "YEARLY")
+      const cashFlowYearly = data?.CashFlow?.filter(
+        (item) => item.Type === "YEARLY"
       );
       const structredData = {
         ...data,

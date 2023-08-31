@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const { convertNumbersInArray } = require("../../utils/stock/numberConverter");
 
 const prisma = new PrismaClient();
 
@@ -29,7 +28,8 @@ const DividendHistoryResolver = {
           }
         }
       });
-      const DividendHistory = convertNumbersInArray(data.DividendHistory);
+      // const DividendHistory = convertNumbersInArray(data.DividendHistory);
+      const DividendHistory = data.DividendHistory;
       const structredData = {
         ...data,
         tickerName: tickerName,

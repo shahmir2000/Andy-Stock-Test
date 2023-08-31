@@ -952,7 +952,15 @@ const populateOneTicker = async ({ ticker }) => {
                   Number(balanceSheet_quat_org[index - 1].shortTermDebt) +
                   Number(balanceSheet_quat_org[index - 1].longTermDebt)
               })
-            ),
+            )
+              ? calclateDebtGrowth({
+                  currentDebt:
+                    Number(item.shortTermDebt) + Number(item.longTermDebt),
+                  previousDebt:
+                    Number(balanceSheet_quat_org[index - 1].shortTermDebt) +
+                    Number(balanceSheet_quat_org[index - 1].longTermDebt)
+                })
+              : null,
           currentRatio:
             isValidNumber(item.totalCurrentAssets) &&
             isValidNumber(Number(item.totalCurrentLiabilities))
@@ -1118,7 +1126,15 @@ const populateOneTicker = async ({ ticker }) => {
                   Number(balanceSheet_yearly_org[index - 1].shortTermDebt) +
                   Number(balanceSheet_yearly_org[index - 1].longTermDebt)
               })
-            ),
+            )
+              ? calclateDebtGrowth({
+                  currentDebt:
+                    Number(item.shortTermDebt) + Number(item.longTermDebt),
+                  previousDebt:
+                    Number(balanceSheet_yearly_org[index - 1].shortTermDebt) +
+                    Number(balanceSheet_yearly_org[index - 1].longTermDebt)
+                })
+              : null,
           currentRatio:
             isValidNumber(item.totalCurrentAssets) &&
             isValidNumber(item.totalCurrentLiabilities)
@@ -1556,6 +1572,9 @@ const populateOneTicker = async ({ ticker }) => {
             item?.netIncome,
             incomeStatement_quat_org[index + 1]?.netIncome
           ),
+          depreciationAndAmortization: isValidNumber(
+            item?.depreciationAndAmortization
+          ),
           operatingIncome: isValidNumber(item?.operatingIncome),
           opIncomeGrowth: calculateGrowth(
             item?.operatingIncome,
@@ -1667,7 +1686,9 @@ const populateOneTicker = async ({ ticker }) => {
           dividendGrowth: dividendGrowth?.growth,
           epsActual: isValidNumber(sameInAnnual?.epsActual),
           ebitdaGrowth: ebitdaGrowth?.growth,
-          depreciationAndAmortization: item?.depreciationAndAmortization,
+          depreciationAndAmortization: isValidNumber(
+            item?.depreciationAndAmortization
+          ),
           sharesOutDiluted: isValidNumber(
             sameInBalanceSheet?.commonStockSharesOutstanding
           ),
@@ -2124,7 +2145,7 @@ const populateOneTicker = async ({ ticker }) => {
       //       isValidNumber(TargetPrice)) *
       //     100
       //   : null,
-      evOverEbitdaTTM:
+      evOverEbitda:
         EnterpriseValue && EBITDA
           ? calculateEvOverEbitda({
               EnterpriseValue,
@@ -2578,8 +2599,9 @@ const populateOneTicker = async ({ ticker }) => {
       throw new Error(`Ticker by id ${TickerId.id} not found!`);
     }
     const OfficersData = convertValuesToArrayTypes(Officers);
-
+    // **************** don't uncomment bottom  line ****************
     // stringifyValuesExceptSpecial(General);
+    // **************** don't uncomment upper  line ****************
 
     const newGeneral = { ...General };
     delete newGeneral?.AddressData;
@@ -2790,161 +2812,218 @@ const populateOneTicker = async ({ ticker }) => {
         });
       }
     );
-    // const convertedcashFlowYearly = convertValuesToArrayTypes(cashFlow_yearly);
-    // const cashFlowPromisesYearly = convertedcashFlowYearly.map(
-    //   (convertedcashFlowYearly) => {
-    //     return prisma.cashFlow.create({
-    //       data: {
-    //         ...convertedcashFlowYearly,
-    //         Type: Type.YEARLY,
-    //         Ticker: {
-    //           connect: {
-    //             id: TickerId.id
-    //           }
-    //         }
-    //       }
-    //     });
-    //   }
-    // );
+    const convertedcashFlowYearly = convertValuesToArrayTypes(cashFlow_yearly);
+    const cashFlowPromisesYearly = convertedcashFlowYearly.map(
+      (convertedcashFlowYearly) => {
+        const convertedcashFlowYearlyNew = { ...convertedcashFlowYearly };
+        delete convertedcashFlowYearlyNew?.priceOverFcfRatio;
+        const priceOverFcfRatio = convertedcashFlowYearly?.priceOverFcfRatio
+          ? parseFloat(convertedcashFlowYearly?.priceOverFcfRatio)
+          : null;
+        return prisma.cashFlow.create({
+          data: {
+            ...convertedcashFlowYearlyNew,
+            priceOverFcfRatio,
+            Type: Type.YEARLY,
+            Ticker: {
+              connect: {
+                id: TickerId.id
+              }
+            }
+          }
+        });
+      }
+    );
 
-    // const convertedcashFlowQuat = convertValuesToArrayTypes(cashFlow_quat);
-    // const cashFlowPromisesQuaterly = convertedcashFlowQuat.map(
-    //   (convertedcashFlowQuat) => {
-    //     return prisma.cashFlow.create({
-    //       data: {
-    //         ...convertedcashFlowQuat,
-    //         Type: Type.QUARTERLY,
-    //         Ticker: {
-    //           connect: {
-    //             id: TickerId.id
-    //           }
-    //         }
-    //       }
-    //     });
-    //   }
-    // );
+    const convertedcashFlowQuat = convertValuesToArrayTypes(cashFlow_quat);
+    const cashFlowPromisesQuaterly = convertedcashFlowQuat.map(
+      (convertedcashFlowQuat) => {
+        const convertedcashFlowQuatNew = { ...convertedcashFlowQuat };
+        delete convertedcashFlowQuatNew?.priceOverFcfRatio;
+        const priceOverFcfRatio = convertedcashFlowQuat?.priceOverFcfRatio
+          ? parseFloat(convertedcashFlowQuat?.priceOverFcfRatio)
+          : null;
 
-    // const convertedincomeStatementQuaterly =
-    //   convertValuesToArrayTypes(incomeStatement_quat);
+        return prisma.cashFlow.create({
+          data: {
+            ...convertedcashFlowQuatNew,
+            priceOverFcfRatio,
+            Type: Type.QUARTERLY,
+            Ticker: {
+              connect: {
+                id: TickerId.id
+              }
+            }
+          }
+        });
+      }
+    );
 
-    // const incomeStatementPromisesQuaterly =
-    //   convertedincomeStatementQuaterly.map(
-    //     (convertedincomeStatementQuaterly) => {
-    //       return prisma.incomeStatement.create({
-    //         data: {
-    //           ...convertedincomeStatementQuaterly,
-    //           Type: Type.QUARTERLY,
-    //           Ticker: {
-    //             connect: {
-    //               id: TickerId.id
-    //             }
-    //           }
-    //         }
-    //       });
-    //     }
-    //   );
-    // const convertedincomeStatementyearly = convertValuesToArrayTypes(
-    //   incomeStatement_yearly
-    // );
+    const convertedincomeStatementQuaterly =
+      convertValuesToArrayTypes(incomeStatement_quat);
 
-    // const incomeStatementPromisesyearly = convertedincomeStatementyearly.map(
-    //   (convertedincomeStatementyearly) => {
-    //     return prisma.incomeStatement.create({
-    //       data: {
-    //         ...convertedincomeStatementyearly,
-    //         Type: Type.YEARLY,
-    //         Ticker: {
-    //           connect: {
-    //             id: TickerId.id
-    //           }
-    //         }
-    //       }
-    //     });
-    //   }
-    // );
-    // const convertedbalanceSheetyearly =
-    //   convertValuesToArrayTypes(balanceSheet_yearly);
-    // const balanceSheetPromisesyearly = convertedbalanceSheetyearly.map(
-    //   (convertedbalanceSheetyearly) => {
-    //     return prisma.balanceSheet.create({
-    //       data: {
-    //         ...convertedbalanceSheetyearly,
-    //         Type: Type.YEARLY,
-    //         Ticker: {
-    //           connect: {
-    //             id: TickerId.id
-    //           }
-    //         }
-    //       }
-    //     });
-    //   }
-    // );
+    const incomeStatementPromisesQuaterly =
+      convertedincomeStatementQuaterly.map(
+        (convertedincomeStatementQuaterly) => {
+          // **********************************new Objet******************************
+          const convertedincomeStatementQuaterlyNew = {
+            ...convertedincomeStatementQuaterly
+          };
+          delete convertedincomeStatementQuaterlyNew?.priceOverFcfRatio;
+          delete convertedincomeStatementQuaterlyNew?.sellingGeneralAdministrative;
+          const sellingGeneralAdministrative =
+            convertedincomeStatementQuaterly?.sellingGeneralAdministrative
+              ? parseFloat(
+                  convertedincomeStatementQuaterly?.sellingGeneralAdministrative
+                )
+              : null;
 
-    // const convertedbalanceSheetQuat =
-    //   convertValuesToArrayTypes(balanceSheet_quat);
-    // const balanceSheetPromisesQuat = convertedbalanceSheetQuat.map(
-    //   (convertedbalanceSheetQuat) => {
-    //     return prisma.balanceSheet.create({
-    //       data: {
-    //         ...convertedbalanceSheetQuat,
-    //         Type: Type.QUARTERLY,
-    //         Ticker: {
-    //           connect: {
-    //             id: TickerId.id
-    //           }
-    //         }
-    //       }
-    //     });
-    //   }
-    // );
+          const researchDevelopment =
+            convertedincomeStatementQuaterlyNew?.researchDevelopment
+              ? parseFloat(
+                  convertedincomeStatementQuaterlyNew?.researchDevelopment
+                )
+              : null;
+          // **********************************new Objet******************************
+
+          return prisma.incomeStatement.create({
+            data: {
+              ...convertedincomeStatementQuaterlyNew,
+              sellingGeneralAdministrative,
+              researchDevelopment,
+              Type: Type.QUARTERLY,
+              Ticker: {
+                connect: {
+                  id: TickerId.id
+                }
+              }
+            }
+          });
+        }
+      );
+    const convertedincomeStatementyearly = convertValuesToArrayTypes(
+      incomeStatement_yearly
+    );
+
+    const incomeStatementPromisesyearly = convertedincomeStatementyearly.map(
+      (convertedincomeStatementyearly) => {
+        // **********************************new Objet******************************
+        const convertedincomeStatementyearlyNew = {
+          ...convertedincomeStatementyearly
+        };
+        delete convertedincomeStatementyearlyNew?.priceOverFcfRatio;
+        delete convertedincomeStatementyearlyNew?.sellingGeneralAdministrative;
+        const sellingGeneralAdministrative =
+          convertedincomeStatementyearlyNew?.sellingGeneralAdministrative
+            ? parseFloat(
+                convertedincomeStatementyearlyNew?.sellingGeneralAdministrative
+              )
+            : null;
+
+        const researchDevelopment =
+          convertedincomeStatementyearlyNew?.researchDevelopment
+            ? parseFloat(convertedincomeStatementyearlyNew?.researchDevelopment)
+            : null;
+        // **********************************new Objet******************************
+
+        return prisma.incomeStatement.create({
+          data: {
+            ...convertedincomeStatementyearlyNew,
+            sellingGeneralAdministrative,
+            researchDevelopment,
+            Type: Type.YEARLY,
+            Ticker: {
+              connect: {
+                id: TickerId.id
+              }
+            }
+          }
+        });
+      }
+    );
+    const convertedbalanceSheetyearly =
+      convertValuesToArrayTypes(balanceSheet_yearly);
+    const balanceSheetPromisesyearly = convertedbalanceSheetyearly.map(
+      (convertedbalanceSheetyearly) => {
+        return prisma.balanceSheet.create({
+          data: {
+            ...convertedbalanceSheetyearly,
+            Type: Type.YEARLY,
+            Ticker: {
+              connect: {
+                id: TickerId.id
+              }
+            }
+          }
+        });
+      }
+    );
+
+    const convertedbalanceSheetQuat =
+      convertValuesToArrayTypes(balanceSheet_quat);
+    const balanceSheetPromisesQuat = convertedbalanceSheetQuat.map(
+      (convertedbalanceSheetQuat) => {
+        return prisma.balanceSheet.create({
+          data: {
+            ...convertedbalanceSheetQuat,
+            Type: Type.QUARTERLY,
+            Ticker: {
+              connect: {
+                id: TickerId.id
+              }
+            }
+          }
+        });
+      }
+    );
 
     const [
       TTMRes,
       GeneralRes,
       dividendsHistoryRes,
-      // earningsQuaterlyRes,
-      // earningsYearlyRes,
+      earningsQuaterlyRes,
+      earningsYearlyRes,
       dividendsYearlyRes,
       dividendsQuarterlyRes,
       ratiosAndMetricsYearlyRes,
-      ratiosAndMetricsQuatRes
-      // cashFlowQuateRes,
-      // cashFlowYearlyRes,
-      // cashFlowQuatRes,
-      // incomeStatementQuaterlyRes,
-      // incomeStatementyearlyRes,
-      // balanceSheetyearlyRes,
-      // balanceSheetQuatRes,
-      // earningsTrendResQuat,
-      // earningsTrendResYearly
+      ratiosAndMetricsQuatRes,
+      cashFlowQuateRes,
+      cashFlowYearlyRes,
+      cashFlowQuatRes,
+      incomeStatementQuaterlyRes,
+      incomeStatementyearlyRes,
+      balanceSheetyearlyRes,
+      balanceSheetQuatRes,
+      earningsTrendResQuat,
+      earningsTrendResYearly
     ] = await prisma.$transaction([
       TTMPromise,
       GeneralPromise,
       ...earningsPromisesQuat,
       ...earningsPromisesYearly,
+      ...earningsPromisesTrendsYearly,
       ...earningsPromisesTrendsQuat,
       ...dividendsHistory,
       ...dividendsPromisesYearly,
       ...dividendsPromisesQuarterly,
       ...ratiosAndMetricsPromisesYearly,
       ...ratiosAndMetricsPromisesQuater,
-      // ...cashFlowPromisesYearly,
-      // ...cashFlowPromisesQuaterly,
-      // ...incomeStatementPromisesQuaterly,
-      // ...incomeStatementPromisesyearly,
-      // ...balanceSheetPromisesyearly,
-      // ...balanceSheetPromisesQuat,
-      ...earningsPromisesTrendsYearly
+      ...cashFlowPromisesYearly,
+      ...cashFlowPromisesQuaterly,
+      ...incomeStatementPromisesQuaterly,
+      ...incomeStatementPromisesyearly,
+      ...balanceSheetPromisesyearly,
+      ...balanceSheetPromisesQuat
     ]);
 
-    // const GeneralExist = await prisma.general.findFirst({
-    //   where: {
-    //     tickerId: TickerId?.id
-    //   }
-    // });
-    // if (!GeneralExist) {
-    //   throw new Error(`General by id ${GeneralExist?.id} not found!`);
-    // }
+    const GeneralExist = await prisma.general.findFirst({
+      where: {
+        tickerId: TickerId?.id
+      }
+    });
+    if (!GeneralExist) {
+      throw new Error(`General by id ${GeneralExist?.id} not found!`);
+    }
 
     const findActive = await prisma.lastTicker.findMany({});
     if (findActive.length > 0) {
@@ -2967,23 +3046,24 @@ const populateOneTicker = async ({ ticker }) => {
     }
 
     return {
-      TTMRes
-      // GeneralRes,
-      // dividendsHistoryRes,
-      // earningsQuaterlyRes,
-      // earningsYearlyRes,
-      // dividendsYearlyRes,
-      // dividendsQuarterlyRes,
-      // ratiosAndMetricsYearlyRes,
-      // cashFlowQuateRes,
-      // cashFlowYearlyRes,
-      // cashFlowQuatRes,
-      // incomeStatementQuaterlyRes,
-      // incomeStatementyearlyRes,
-      // balanceSheetyearlyRes,
-      // balanceSheetQuatRes,
-      // earningsTrendResQuat,
-      // earningsTrendResYearly
+      TTMRes,
+      GeneralRes,
+      dividendsHistoryRes,
+      earningsQuaterlyRes,
+      earningsYearlyRes,
+      dividendsYearlyRes,
+      dividendsQuarterlyRes,
+      ratiosAndMetricsYearlyRes,
+      ratiosAndMetricsQuatRes,
+      cashFlowQuateRes,
+      cashFlowYearlyRes,
+      cashFlowQuatRes,
+      incomeStatementQuaterlyRes,
+      incomeStatementyearlyRes,
+      balanceSheetyearlyRes,
+      balanceSheetQuatRes,
+      earningsTrendResQuat,
+      earningsTrendResYearly
     };
   } catch (error) {
     console.log("error=========================>>", error);

@@ -1,7 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const {
-  convertAttributesToNumber
-} = require("../../utils/stock/numberConverter");
 
 const prisma = new PrismaClient();
 
@@ -30,7 +27,8 @@ const PriceForecastResolver = {
           }
         }
       });
-      const PriceForecast = convertAttributesToNumber(data?.TTM);
+      // const PriceForecast = convertAttributesToNumber(data?.TTM);
+      const PriceForecast = data?.TTM;
 
       const structredData = {
         ...data,

@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js add graphql-voyager
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js remove prisma
 
 PATH: 
-  C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Users\malik\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\ProgramData\chocolatey\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Users\malik\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts;C:\Program Files\Redis\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\malik\.console-ninja\.bin;C:\Users\malik\AppData\Local\Microsoft\WindowsApps;C:\Users\malik\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\malik\AppData\Roaming\npm;C:\Users\malik\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\malik\AppData\Local\Android\Sdk\platform-tools;C:\Users\malik\AppData\Local\GitHubDesktop\bin
+  C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Users\ShahmirAli\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\ShahmirAli\.console-ninja\.bin;C:\Users\ShahmirAli\AppData\Local\Microsoft\WindowsApps;C:\Users\ShahmirAli\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ShahmirAli\AppData\Roaming\nvm;C:\Program Files\nodejs
 
 Yarn version: 
   1.22.19
@@ -14,16 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-5.11.0.tgz: ESOCKETTIMEDOUT
-      at ClientRequest.<anonymous> (C:\Users\malik\AppData\Roaming\nvm\v16.16.0\node_modules\yarn\lib\cli.js:141517:19)
-      at Object.onceWrapper (node:events:641:28)
-      at ClientRequest.emit (node:events:527:28)
-      at TLSSocket.emitRequestTimeout (node:_http_client:771:9)
-      at Object.onceWrapper (node:events:641:28)
-      at TLSSocket.emit (node:events:539:35)
-      at TLSSocket.Socket._onTimeout (node:net:516:8)
-      at listOnTimeout (node:internal/timers:559:17)
-      at processTimers (node:internal/timers:502:7)
+  Error: EPERM: operation not permitted, unlink 'D:\nodejs\Andy-testing-backend\testing\node_modules\prisma\engines\2804dc98259d2ea960602aca6b8e7fdc03c1758f\query_engine-windows.dll.node'
 
 npm manifest: 
   {
@@ -35,6 +26,7 @@ npm manifest:
       "start": "node app.js",
       "dev": "nodemon app.js",
       "db:migrate": "npx prisma migrate dev",
+      "db:reset": "npx prisma db push --force-reset",
       "studio": "yarn prisma studio",
       "lint": "eslint --fix --ext .js,.jsx ."
     },
@@ -46,15 +38,16 @@ npm manifest:
     },
     "dependencies": {
       "@apollo/server": "^4.9.1",
-      "@prisma/client": "^4.13.0",
       "apollo-server-express": "^3.12.0",
       "axios": "^1.4.0",
       "bcryptjs": "^2.4.3",
+      "body-parser": "^1.20.2",
       "cors": "^2.8.5",
       "dayjs": "^1.11.9",
       "dotenv": "^16.0.3",
       "express": "^4.18.2",
       "express-fileupload": "^1.4.0",
+      "express-graphql": "^0.12.0",
       "express-validator": "^7.0.1",
       "express-ws": "^5.0.2",
       "fs": "^0.0.1-security",
@@ -63,7 +56,6 @@ npm manifest:
       "http-errors": "^2.0.0",
       "jsonwebtoken": "^9.0.0",
       "morgan": "^1.10.0",
-      "prisma": "^4.13.0",
       "ws": "^8.13.0",
       "xlsx": "^0.18.5",
       "zod": "^3.21.4"
@@ -461,22 +453,22 @@ Lockfile:
       "@nodelib/fs.scandir" "2.1.5"
       fastq "^1.6.0"
   
-  "@prisma/client@^4.13.0":
-    version "4.16.2"
-    resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.16.2.tgz#3bb9ebd49b35c8236b3d468d0215192267016e2b"
-    integrity sha512-qCoEyxv1ZrQ4bKy39GnylE8Zq31IRmm8bNhNbZx7bF2cU5aiCCnSa93J2imF88MBjn7J9eUQneNxUQVJdl/rPQ==
+  "@prisma/client@^5.2.0":
+    version "5.2.0"
+    resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.2.0.tgz#cbfdd440614b38736563a7999f39922fcde0ed50"
+    integrity sha512-AiTjJwR4J5Rh6Z/9ZKrBBLel3/5DzUNntMohOy7yObVnVoTNVFi2kvpLZlFuKO50d7yDspOtW6XBpiAd0BVXbQ==
     dependencies:
-      "@prisma/engines-version" "4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81"
+      "@prisma/engines-version" "5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f"
   
-  "@prisma/engines-version@4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81":
-    version "4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81"
-    resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81.tgz#d3b5dcf95b6d220e258cbf6ae19b06d30a7e9f14"
-    integrity sha512-q617EUWfRIDTriWADZ4YiWRZXCa/WuhNgLTVd+HqWLffjMSPzyM5uOWoauX91wvQClSKZU4pzI4JJLQ9Kl62Qg==
+  "@prisma/engines-version@5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f":
+    version "5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f"
+    resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-5.2.0-25.2804dc98259d2ea960602aca6b8e7fdc03c1758f.tgz#11366e7ff031c908debf4983248d40046016de37"
+    integrity sha512-jsnKT5JIDIE01lAeCj2ghY9IwxkedhKNvxQeoyLs6dr4ZXynetD0vTy7u6wMJt8vVPv8I5DPy/I4CFaoXAgbtg==
   
-  "@prisma/engines@4.16.2":
-    version "4.16.2"
-    resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.16.2.tgz#5ec8dd672c2173d597e469194916ad4826ce2e5f"
-    integrity sha512-vx1nxVvN4QeT/cepQce68deh/Turxy5Mr+4L4zClFuK1GlxN3+ivxfuv+ej/gvidWn1cE1uAhW7ALLNlYbRUAw==
+  "@prisma/engines@5.2.0":
+    version "5.2.0"
+    resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-5.2.0.tgz#e5dff48eb324c8137393933292d44ea5c3bc2ce7"
+    integrity sha512-dT7FOLUCdZmq+AunLqB1Iz+ZH/IIS1Fz2THmKZQ6aFONrQD/BQ5ecJ7g2wGS2OgyUFf4OaLam6/bxmgdOBDqig==
   
   "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
     version "1.1.2"
@@ -667,7 +659,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
     integrity sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==
   
-  accepts@^1.3.5, accepts@~1.3.8:
+  accepts@^1.3.5, accepts@^1.3.7, accepts@~1.3.8:
     version "1.3.8"
     resolved "https://registry.yarnpkg.com/accepts/-/accepts-1.3.8.tgz#0bf0be125b67014adcb0b0921e62db7bffe16b2e"
     integrity sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==
@@ -948,7 +940,7 @@ Lockfile:
       type-is "~1.6.18"
       unpipe "1.0.0"
   
-  body-parser@^1.19.0, body-parser@^1.20.0:
+  body-parser@^1.19.0, body-parser@^1.20.0, body-parser@^1.20.2:
     version "1.20.2"
     resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.20.2.tgz#6feb0e21c4724d06de7ff38da36dad4f57a747fd"
     integrity sha512-ml9pReCu3M61kGlqoTm2umSXTlRTuGTx0bfYj+uIUKKYycG5NtSbeetV3faSU6R7ajOPw0g/J1PvK4qNy7s5bA==
@@ -1083,7 +1075,7 @@ Lockfile:
     dependencies:
       safe-buffer "5.2.1"
   
-  content-type@~1.0.4, content-type@~1.0.5:
+  content-type@^1.0.4, content-type@~1.0.4, content-type@~1.0.5:
     version "1.0.5"
     resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.5.tgz#8b773162656d1d1086784c8f23a54ce6d73d7918"
     integrity sha512-nTjqfcBFEipKdXCv4YDQWCfmcLZKm81ldF0pAopTvyrFGVbcR6P/VAAd5G7N+0tTr8QqiU0tFadD6FK4NtJwOA==
@@ -1173,6 +1165,11 @@ Lockfile:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/depd/-/depd-2.0.0.tgz#b696163cc757560d09cf22cc8fad1571b79e76df"
     integrity sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
+  
+  depd@~1.1.2:
+    version "1.1.2"
+    resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
+    integrity sha512-7emPTl6Dpo6JRXOXjLRxck+FlLRX5847cLKEn00PLAgc3g2hTZZgr+e4c2v6QpSmLeFP3n5yUo7ft6avBK/5jQ==
   
   destroy@1.2.0:
     version "1.2.0"
@@ -1416,6 +1413,16 @@ Lockfile:
     integrity sha512-RjzLCHxkv3umDeZKeFeMg8w7qe0V09w3B7oGZprr/oO2H/ISCgNzuqzn7gV3HRWb37GjRk429CCpSLS2KNTqMQ==
     dependencies:
       busboy "^1.6.0"
+  
+  express-graphql@^0.12.0:
+    version "0.12.0"
+    resolved "https://registry.yarnpkg.com/express-graphql/-/express-graphql-0.12.0.tgz#58deabc309909ca2c9fe2f83f5fbe94429aa23df"
+    integrity sha512-DwYaJQy0amdy3pgNtiTDuGGM2BLdj+YO2SgbKoLliCfuHv3VVTt7vNG/ZqK2hRYjtYHE2t2KB705EU94mE64zg==
+    dependencies:
+      accepts "^1.3.7"
+      content-type "^1.0.4"
+      http-errors "1.8.0"
+      raw-body "^2.4.1"
   
   express-validator@^7.0.1:
     version "7.0.1"
@@ -1753,6 +1760,17 @@ Lockfile:
     integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
     dependencies:
       function-bind "^1.1.1"
+  
+  http-errors@1.8.0:
+    version "1.8.0"
+    resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-1.8.0.tgz#75d1bbe497e1044f51e4ee9e704a62f28d336507"
+    integrity sha512-4I8r0C5JDhT5VkvI47QktDW75rNlGVsUf/8hzjCC/wkWI/jdTRmBb9aI7erSG82r1bjKY3F6k28WnsVxB1C73A==
+    dependencies:
+      depd "~1.1.2"
+      inherits "2.0.4"
+      setprototypeof "1.2.0"
+      statuses ">= 1.5.0 < 2"
+      toidentifier "1.0.0"
   
   http-errors@2.0.0, http-errors@^2.0.0:
     version "2.0.0"
@@ -2356,12 +2374,12 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
     integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
   
-  prisma@^4.13.0:
-    version "4.16.2"
-    resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.16.2.tgz#469e0a0991c6ae5bcde289401726bb012253339e"
-    integrity sha512-SYCsBvDf0/7XSJyf2cHTLjLeTLVXYfqp7pG5eEVafFLeT0u/hLFz/9W196nDRGUOo1JfPatAEb+uEnTQImQC1g==
+  prisma@^5.2.0:
+    version "5.2.0"
+    resolved "https://registry.yarnpkg.com/prisma/-/prisma-5.2.0.tgz#a302dc2635cdec1d22d552ece837fb29a03563b9"
+    integrity sha512-FfFlpjVCkZwrqxDnP4smlNYSH1so+CbfjgdpioFzGGqlQAEm6VHAYSzV7jJgC3ebtY9dNOhDMS2+4/1DDSM7bQ==
     dependencies:
-      "@prisma/engines" "4.16.2"
+      "@prisma/engines" "5.2.0"
   
   prop-types@^15.8.1:
     version "15.8.1"
@@ -2422,7 +2440,7 @@ Lockfile:
       iconv-lite "0.4.24"
       unpipe "1.0.0"
   
-  raw-body@2.5.2:
+  raw-body@2.5.2, raw-body@^2.4.1:
     version "2.5.2"
     resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.5.2.tgz#99febd83b90e08975087e8f1f9419a149366b68a"
     integrity sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==
@@ -2629,6 +2647,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/statuses/-/statuses-2.0.1.tgz#55cb000ccf1d48728bd23c685a063998cf1a1b63"
     integrity sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==
   
+  "statuses@>= 1.5.0 < 2":
+    version "1.5.0"
+    resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
+    integrity sha512-OpZ3zP+jT1PI7I8nemJX4AKmAX070ZkYPVWV/AaKTJl+tXCTGyVdC1a4SL8RUQYEwk/f34ZX8UTykN68FwrqAA==
+  
   streamsearch@^1.1.0:
     version "1.1.0"
     resolved "https://registry.yarnpkg.com/streamsearch/-/streamsearch-1.1.0.tgz#404dd1e2247ca94af554e841a8ef0eaa238da764"
@@ -2717,6 +2740,11 @@ Lockfile:
     integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
     dependencies:
       is-number "^7.0.0"
+  
+  toidentifier@1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
+    integrity sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
   
   toidentifier@1.0.1:
     version "1.0.1"

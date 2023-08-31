@@ -1,8 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const {
-  convertNumbersInArray,
-  convertAttributesToNumber
-} = require("../../utils/stock/numberConverter");
 const { getMostRecentDateObject } = require("../../utils/stock/stockTwo.utils");
 
 const prisma = new PrismaClient();
@@ -22,9 +18,7 @@ const DividendCalendarResolver = {
         id: ticker.id,
         company: ticker.company,
         ticker: ticker.ticker,
-        ...convertAttributesToNumber(
-          getMostRecentDateObject(ticker.DividendHistory)
-        )
+        ...getMostRecentDateObject(ticker.DividendHistory)
       }));
 
       return {

@@ -13,7 +13,7 @@ type Data {
   returnOnEquity5Year        :    Float
   returnOnAssets5Year        :    Float
   returnOnCapital5Year       :    Float
-  lastSplitDate              :    Float
+  lastSplitDate              :    String
   lastStockSplit             :    String
   lastStockSplitRatio        :    String
   float                      :    Float
@@ -225,15 +225,15 @@ earningYieldY            :    Float
 
 
 
- type StocksScreener {
-   count: Int
+ type TTMScreener {
+  count: Int
    data: [Data]
   
 
  }
   
   type Query {
-    StocksScreener(skip: Int , take: Int, search: String): StocksScreener
+   TTMScreener(skip: Int , take: Int, search: String):TTMScreener
   }
 
 

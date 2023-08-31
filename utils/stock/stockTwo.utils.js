@@ -486,8 +486,42 @@ function getQuartersByYear({ data, varableName }) {
 
   return data;
 }
+// Function to check if a value contains the search term
+function FilterSearch(value, search) {
+  if (typeof value === "number") {
+    return value?.toString()?.includes(search);
+  } else if (typeof value === "string") {
+    return value?.includes(search);
+  } else if (typeof value === "undefined") {
+    return value;
+  }
+  return false;
+}
+
+function getValuesWithSearch(values, searchValue) {
+  const filteredValues = values.filter((item) => {
+    for (const key in item) {
+      if (typeof item[key] === "object") {
+        for (const nestedKey in item[key]) {
+          if (FilterSearch(item[key][nestedKey], searchValue)) {
+            return true;
+          }
+        }
+      } else {
+        if (FilterSearch(item[key], searchValue)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  });
+
+  return filteredValues;
+}
 
 module.exports = {
+  getValuesWithSearch,
+  FilterSearch,
   calculateRevenuePrecent,
   calculateGrowthMarketCap,
   margedArrayByQuat,

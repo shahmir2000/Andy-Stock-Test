@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const { convertNumbersInArray } = require("../../utils/stock/numberConverter");
 
 const prisma = new PrismaClient();
 
@@ -33,11 +32,11 @@ const EarningsResolver = {
         }
       });
 
-      const EarningsQuarterly = convertNumbersInArray(
-        data?.EarningsTrand?.filter((item) => item.Type === "QUARTERLY")
+      const EarningsQuarterly = data?.EarningsTrand?.filter(
+        (item) => item.Type === "QUARTERLY"
       );
-      const EarningsYearly = convertNumbersInArray(
-        data?.EarningsTrand?.filter((item) => item.Type === "YEARLY")
+      const EarningsYearly = data?.EarningsTrand?.filter(
+        (item) => item.Type === "YEARLY"
       );
       const structredData = {
         ...data,

@@ -5,12 +5,13 @@ const prisma = new PrismaClient();
 const EarningCalenderResolver = {
   Query: {
     Earnings_Calender: async (_, { from, to }) => {
+      console.log(from, to);
       const mixCalender = await prisma.earningsTrand.findMany({
         where: {
           Type: "QUARTERLY",
           reportDate: {
-            gte: new Date(from),
-            lte: new Date(to)
+            gte: from,
+            lte: to
           }
         },
         include: {
@@ -26,24 +27,9 @@ const EarningCalenderResolver = {
         };
       });
 
-      const convertedToFloats = convertNumbersInArray(withTicker);
+      // const convertedToFloats = convertNumbersInArray(withTicker);
+      const convertedToFloats = withTicker;
 
-      // const groupedData = {};
-
-      // // Iterate through the input array
-      // convertedToFloats.forEach((item) => {
-      //   if (!groupedData[item?.date]) {
-      //     groupedData[item?.date] = {
-      //       date: item?.date,
-      //       data: [{ ...item }]
-      //     };
-      //   } else {
-      //     groupedData[item?.date].data.push({ ...item });
-      //   }
-      // });
-
-      // Convert the groupedData object into an array
-      // const earningCalender = Object.values(groupedData);
       const earningCalender = convertedToFloats?.reduce((result, item) => {
         const { reportDate, ...data } = item;
 

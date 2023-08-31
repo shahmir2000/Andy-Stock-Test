@@ -17,7 +17,7 @@ enum Type {
   returnOnEquity5Year        :    Float
   returnOnAssets5Year        :    Float
   returnOnCapital5Year       :    Float
-  lastSplitDate              :    Float
+  lastSplitDate              :    String
   lastStockSplit             :    String
   lastStockSplitRatio        :    String
   float                      :    Float

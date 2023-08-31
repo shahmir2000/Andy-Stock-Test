@@ -1,6 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-
-const { convertNumbersInArray } = require("../../utils/stock/numberConverter");
 const prisma = new PrismaClient();
 
 const TickerBySectorResolver = {
@@ -9,30 +7,26 @@ const TickerBySectorResolver = {
       const count = await prisma.ticker.count({
         where: industryName
           ? {
-              Industries: {
-                name: industryName ? industryName : null
+              General: {
+                Industry: industryName ? industryName : null
               }
             }
           : {
-              Industries: {
-                Sectors: {
-                  name: sectorName ? sectorName : null
-                }
+              General: {
+                Sector: sectorName ? sectorName : null
               }
             }
       });
       const data = await prisma.ticker.findMany({
         where: industryName
           ? {
-              Industries: {
-                name: industryName ? industryName : null
+              General: {
+                Industry: industryName ? industryName : null
               }
             }
           : {
-              Industries: {
-                Sectors: {
-                  name: sectorName ? sectorName : null
-                }
+              General: {
+                Sector: sectorName ? sectorName : null
               }
             },
         include: {
@@ -53,7 +47,8 @@ const TickerBySectorResolver = {
 
       return {
         count,
-        SectorTicker: convertNumbersInArray(mergedData)
+        SectorTicker: mergedData
+        // SectorTicker: convertNumbersInArray(mergedData)
       };
     }
   }

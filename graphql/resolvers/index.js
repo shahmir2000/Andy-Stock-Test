@@ -1,6 +1,5 @@
 const { mergeResolvers } = require("@graphql-tools/merge");
-const TTMresolvers = require("./TTMresolvers");
-const stockScreenResolver = require("./stockScreenresolvers");
+const stockScreenResolver = require("./stockScreen.resolvers");
 const balanceSheetResolver = require("./balancesheet.resolver");
 const incomeStatementResolver = require("./incomeStatement.resolver");
 const EarningCalenderResolver = require("./earningCalender.resolver");
@@ -16,9 +15,10 @@ const AnalystRatingResolver = require("./analystsRating.resolver");
 const DividendCalendarResolver = require("./dividendCalendar.resolver");
 const SectorsAndIndustriesResolver = require("./sectorAndIndustries.resolvers");
 const TickerBySectorResolver = require("./tickerBySector.resolver");
+const TTMResolvers = require("./TTM.resolvers");
 
 const mergedResolvers = mergeResolvers([
-  TTMresolvers,
+  TTMResolvers,
   stockScreenResolver,
   balanceSheetResolver,
   incomeStatementResolver,

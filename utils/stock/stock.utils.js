@@ -141,7 +141,9 @@ exports.calculatePriceOverFcfRatio = ({
   ) {
     const fcfValue = fcfPerShare(freeCashFlow, commonStockSharesOutstanding);
     if (fcfValue && isValidNumber(fcfValue)) {
-      return Number(price) / fcfValue;
+      return Number(price) / fcfValue
+        ? parseFloat(Number(price) / fcfValue)
+        : null;
     } else {
       return null;
     }

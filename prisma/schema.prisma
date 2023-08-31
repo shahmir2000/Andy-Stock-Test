@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -122,7 +123,7 @@ model TTM {
   dividend                        Float?
   netCashOverDebtGrowth           Float?
   lastClosePrice                  Float?
-  evOverEbitdaTTM                 Float?
+  evOverEbitda                    Float?
   evOverEarnings                  Float?
   forwardEvOverSales              Float?
   pegRatio                        Float?
@@ -413,28 +414,28 @@ model RatiosAndMetrics {
 model CashFlow {
   id                          Int      @id @default(autoincrement())
   Type                        Type
-  freeCashFlowMargin          String?
-  freeCashFlowPerShare        String?
-  otherOperatingActivities    String?
-  financingCashFlow           String?
-  salePurchaseOfStock         String?
-  otherFinancingActivities    String?
-  changeToInventory           String?
-  depreciationAndAmortization String?
-  operatingCashFlowGrowth     String?
-  capitalExpenditures         String?
+  freeCashFlowMargin          Float?
+  freeCashFlowPerShare        Float?
+  otherOperatingActivities    Float?
+  financingCashFlow           Float?
+  salePurchaseOfStock         Float?
+  otherFinancingActivities    Float?
+  changeToInventory           Float?
+  depreciationAndAmortization Float?
+  operatingCashFlowGrowth     Float?
+  capitalExpenditures         Float?
   date                        String?
-  priceOverFcfRatio           String?
-  finCashFlow                 String?
-  invCashFlow                 String?
-  sharedBasedCompensation     String?
-  operatingCashFlow           String?
-  fcfGrowth                   String?
-  fcfOverShare                String?
-  netCashFlow                 String?
-  freeCashFlow                String?
-  returnOnEquity              String?
-  returnOnAssets              String?
+  priceOverFcfRatio           Float?
+  finCashFlow                 Float?
+  invCashFlow                 Float?
+  sharedBasedCompensation     Float?
+  operatingCashFlow           Float?
+  fcfGrowth                   Float?
+  fcfOverShare                Float?
+  netCashFlow                 Float?
+  freeCashFlow                Float?
+  returnOnEquity              Float?
+  returnOnAssets              Float?
   Ticker                      Ticker?  @relation(fields: [tickerId], references: [id])
   tickerId                    Int?
   createdAt                   DateTime @default(now())
@@ -444,40 +445,40 @@ model CashFlow {
 model IncomeStatement {
   id                             Int     @id @default(autoincrement())
   Type                           Type
-  sellingGeneralAdministrative   String?
-  freeCashFlowPerShare           String?
-  CashFlowMargin                 String?
-  interestExpense                String?
-  totalOperatingExpenses         String?
-  incomeTaxExpense               String?
-  sharesOutDiluted               String?
-  costOfRevenue                  String?
-  incomeBeforeTax                String?
-  epsActual                      String?
-  dividendGrowth                 String?
-  depreciationAndAmortization    String?
-  ebitdaGrowth                   String?
+  sellingGeneralAdministrative   Float?
+  freeCashFlowPerShare           Float?
+  CashFlowMargin                 Float?
+  interestExpense                Float?
+  totalOperatingExpenses         Float?
+  incomeTaxExpense               Float?
+  sharesOutDiluted               Float?
+  costOfRevenue                  Float?
+  incomeBeforeTax                Float?
+  epsActual                      Float?
+  dividendGrowth                 Float?
+  depreciationAndAmortization    Float?
+  ebitdaGrowth                   Float?
   date                           String?
-  netIncome                      String?
-  epsGrowth                      String?
-  netIncomeGrowth                String?
-  operatingIncome                String?
-  opIncomeGrowth                 String?
-  grossProfit                    String?
-  ebit                           String?
-  ebitda                         String?
-  grossProfitGrowth              String?
-  totalRevenue                   String?
-  revenueGrowth                  String?
-  grossMargin                    String?
-  operatingMargin                String?
-  profitMargin                   String?
-  fcfMargin                      String?
-  ebitdaMargin                   String?
-  ebitMargin                     String?
-  researchDevelopment            String?
-  researchDevelopmentOverRevenue String?
-  psRatio                        String?
+  netIncome                      Float?
+  epsGrowth                      Float?
+  netIncomeGrowth                Float?
+  operatingIncome                Float?
+  opIncomeGrowth                 Float?
+  grossProfit                    Float?
+  ebit                           Float?
+  ebitda                         Float?
+  grossProfitGrowth              Float?
+  totalRevenue                   Float?
+  revenueGrowth                  Float?
+  grossMargin                    Float?
+  operatingMargin                Float?
+  profitMargin                   Float?
+  fcfMargin                      Float?
+  ebitdaMargin                   Float?
+  ebitMargin                     Float?
+  researchDevelopment            Float?
+  researchDevelopmentOverRevenue Float?
+  psRatio                        Float?
 
   Ticker    Ticker?  @relation(fields: [tickerId], references: [id])
   tickerId  Int?
@@ -489,52 +490,52 @@ model BalanceSheet {
   id                                  Int      @id @default(autoincrement())
   Type                                Type
   date                                String?
-  deferredLongTermLiab                String?
-  cashAndEquivalents                  String?
-  shortTermInvestments                String?
-  cashAndShortTermInvestments         String?
-  cashGrowth                          String?
-  netReceivables                      String?
-  inventory                           String?
-  otherCurrentAssets                  String?
-  totalCurrentAssets                  String?
-  debtGrowth                          String?
-  longTermInvestments                 String?
-  accountsPayable                     String?
-  otherCurrentLiab                    String?
-  longTermDebtTotal                   String?
-  totalCurrentLiabilities             String?
-  shortTermDebt                       String?
-  otherAssets                         String?
-  nonCurrentAssetsTotal               String?
-  currentDeferredRevenue              String?
-  liabilitiesAndStockholdersEquity    String?
-  totalStockholderEquity              String?
-  retainedEarnings                    String?
-  accumulatedOtherComprehensiveIncome String?
-  commonStock                         String?
-  goodWillAndIntangibleAssets         String?
-  propertyPlantAndEquipmentNet        String?
-  netWorkingCapital                   String?
-  bookValue                           String?
-  netCashPerShare                     String?
-  sharesOut                           String?
-  netCashOverDebt                     String?
-  totalCash                           String?
-  totalDebt                           String?
-  currentRatio                        String?
-  totalAssets                         String?
-  totalLiab                           String?
-  pbRatio                             String?
-  debtOverEquity                      String?
-  debtOverEbitda                      String?
-  debtOverFcf                         String?
-  shareHolderEquity                   String?
-  workingCapital                      String?
-  assetTurnover                       String?
-  returnOnCapital                     String?
-  netCashOverDebtGrowth               String?
-  priceOverFcfRatio                   String?
+  deferredLongTermLiab                Float?
+  cashAndEquivalents                  Float?
+  shortTermInvestments                Float?
+  cashAndShortTermInvestments         Float?
+  cashGrowth                          Float?
+  netReceivables                      Float?
+  inventory                           Float?
+  otherCurrentAssets                  Float?
+  totalCurrentAssets                  Float?
+  debtGrowth                          Float?
+  longTermInvestments                 Float?
+  accountsPayable                     Float?
+  otherCurrentLiab                    Float?
+  longTermDebtTotal                   Float?
+  totalCurrentLiabilities             Float?
+  shortTermDebt                       Float?
+  otherAssets                         Float?
+  nonCurrentAssetsTotal               Float?
+  currentDeferredRevenue              Float?
+  liabilitiesAndStockholdersEquity    Float?
+  totalStockholderEquity              Float?
+  retainedEarnings                    Float?
+  accumulatedOtherComprehensiveIncome Float?
+  commonStock                         Float?
+  goodWillAndIntangibleAssets         Float?
+  propertyPlantAndEquipmentNet        Float?
+  netWorkingCapital                   Float?
+  bookValue                           Float?
+  netCashPerShare                     Float?
+  sharesOut                           Float?
+  netCashOverDebt                     Float?
+  totalCash                           Float?
+  totalDebt                           Float?
+  currentRatio                        Float?
+  totalAssets                         Float?
+  totalLiab                           Float?
+  pbRatio                             Float?
+  debtOverEquity                      Float?
+  debtOverEbitda                      Float?
+  debtOverFcf                         Float?
+  shareHolderEquity                   Float?
+  workingCapital                      Float?
+  assetTurnover                       Float?
+  returnOnCapital                     Float?
+  netCashOverDebtGrowth               Float?
+  priceOverFcfRatio                   Float?
   Ticker                              Ticker?  @relation(fields: [tickerId], references: [id])
   tickerId                            Int?
   createdAt                           DateTime @default(now())
